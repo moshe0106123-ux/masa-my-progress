@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101a25">
+<meta name="description" content="המרחב האישי שלך להתקדמות, הרגלים ומטרות יומיות.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="המסע שלי">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<title>המסע שלי</title>
+<style>
+:root{color-scheme:dark;--bg:#0b121b;--card:#142130;--card2:#192a3a;--line:#2b4052;--text:#f3f7f7;--muted:#9aadb6;--green:#84dfb8;--green2:#b7f0d6;--gold:#efd08a;--red:#ee9999}
+*{box-sizing:border-box}html{background:var(--bg);-webkit-text-size-adjust:100%}body{margin:0;min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);background:radial-gradient(800px 420px at 90% -10%,#244b4538,transparent 65%),var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--text)}
+button,input{font:inherit}button{cursor:pointer}.wrap{width:min(100% - 28px,760px);margin:auto;padding:24px 0 46px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:11px}.logo{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#a6efcb,#479d82);color:#0c2921;font-size:24px;box-shadow:0 7px 24px #79d6ad25}h1{font-size:25px;margin:0;letter-spacing:-.4px}.sub,.muted,.hint{color:var(--muted)}.sub{font-size:12px;margin-top:2px}.pill{font-size:11px;border:1px solid #84dfb83b;background:#84dfb812;color:var(--green2);padding:7px 10px;border-radius:99px;white-space:nowrap}
+.card{background:linear-gradient(150deg,#192b3b,#121e2b);border:1px solid var(--line);border-radius:21px;padding:19px;margin-top:13px;box-shadow:0 13px 36px #0002}.hero{min-height:245px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}.hero:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:#84dfb812;left:-90px;top:-110px}.hero>*{position:relative}.eyebrow{font-size:13px;color:var(--muted)}.countrow{display:flex;align-items:flex-end;gap:10px;margin:8px 0}.count{font-size:clamp(82px,22vw,112px);line-height:.92;font-weight:800;letter-spacing:-5px;color:var(--green2);font-variant-numeric:tabular-nums}.countlabel{font-weight:700;font-size:18px;padding-bottom:12px}.since{font-size:12px;color:var(--muted);margin-top:9px}.quote{font-size:13px;color:#c5d5d3;margin-top:12px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}.stat{border:1px solid var(--line);background:#07111a45;border-radius:15px;padding:14px}.stat small{color:var(--muted);font-size:12px}.stat strong{display:block;font-size:27px;margin-top:5px;font-variant-numeric:tabular-nums}.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}h2{font-size:17px;margin:0}.hint{font-size:11px}.progress{height:8px;background:#2a3c4c;border-radius:20px;overflow:hidden;margin:10px 0}.bar{height:100%;width:0;background:linear-gradient(90deg,#59b995,#b7f0d6);border-radius:20px;transition:width .2s}.goals{display:grid;gap:8px;margin-top:14px}.goal{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid var(--line);border-radius:13px;background:#07111a36;min-height:48px}.goal input{width:21px;height:21px;accent-color:#84dfb8;flex:none}.goal span{flex:1;font-size:14px}.goal.done span{text-decoration:line-through;color:var(--muted)}.remove{border:0;background:transparent;color:#91a4ae;font-size:20px;padding:0 5px}.addrow{display:flex;gap:8px;margin-top:13px}.addrow input,.dateinput{min-width:0;width:100%;background:#0d1823;color:var(--text);border:1px solid var(--line);border-radius:11px;padding:11px 12px;outline:none}.addrow input:focus,.dateinput:focus{border-color:var(--green)}.btn{border:0;border-radius:11px;min-height:43px;padding:10px 14px;font-weight:700}.primary{background:var(--green);color:#0d2921}.secondary{background:#263c4e;color:var(--text);border:1px solid #40576a}.danger{background:transparent;color:var(--red);border:1px solid #ee99994d}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.calendarhead{display:flex;align-items:center;justify-content:space-between;gap:10px}.monthnav{display:flex;align-items:center;gap:9px}.iconbtn{border:1px solid var(--line);background:#223547;color:var(--text);border-radius:9px;width:34px;height:34px;font-size:20px}.monthlabel{font-size:13px;font-weight:650;min-width:100px;text-align:center}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:15px}.weekday,.day{display:grid;place-items:center;min-height:36px;font-size:12px}.weekday{color:var(--muted)}.day{position:relative;border:1px solid transparent;border-radius:10px;color:#dce7e6}.day.today{border-color:var(--green);color:var(--green2);font-weight:800}.day.has{background:#84dfb81c}.day.has:after{content:"";position:absolute;width:4px;height:4px;border-radius:50%;background:var(--green);bottom:4px}.day.empty{visibility:hidden}.day.future{opacity:.3}.settingsrow{display:grid;gap:10px}.settingactions{display:flex;gap:8px;flex-wrap:wrap}.fine{font-size:11px;color:var(--muted);line-height:1.65}.footer{text-align:center;margin-top:18px}.linkbtn{border:0;background:none;color:var(--muted);font-size:11px;text-decoration:underline;margin-top:12px}.toast{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#e4f7ed;color:#0e3024;padding:11px 16px;border-radius:12px;font-size:13px;font-weight:700;box-shadow:0 9px 30px #0005;transition:.2s;max-width:calc(100% - 30px);z-index:5}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:650px){.wrap{padding-top:34px}.hero{min-height:260px}.card{padding:22px}.day{min-height:43px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <div class="brand"><div class="logo">✦</div><div><h1>המסע שלי</h1><div class="sub">צעד קטן. יום אחרי יום.</div></div></div>
+ <div class="pill">המרחב האישי שלי</div>
+</header>
+<section class="card hero">
+ <div><div class="eyebrow">הרצף הנוכחי שלך</div><div class="countrow"><div class="count" id="streak">1</div><div class="countlabel">ימים</div></div><div class="since" id="since"></div></div>
+ <div><div class="quote">לא צריך להיות מושלם. רק להמשיך לבחור להתקדם.</div><div class="actions"><button class="btn primary" id="todayBtn">אני בוחר להתקדם היום ✓</button></div></div>
+</section>
+<div class="stats">
+ <div class="stat"><small>השיא האישי שלי</small><strong id="best">1</strong></div>
+ <div class="stat"><small>ימים מאז ההתחלה</small><strong id="elapsed">0</strong></div>
+</div>
+<section class="card">
+ <div class="sectionhead"><h2>היעדים שלי להיום</h2><span class="hint" id="goalCount">0/0</span></div>
+ <div class="progress"><div class="bar" id="goalProgress"></div></div><div class="hint" id="goalMessage">בחר יעד אחד קטן להתחיל ממנו.</div>
+ <div class="goals" id="goalList"></div>
+ <form class="addrow" id="addForm"><input id="newGoal" maxlength="52" placeholder="הוסף יעד אישי..." autocomplete="off"><button class="btn secondary" type="submit">הוספה</button></form>
+</section>
+<section class="card">
+ <div class="calendarhead"><div><h2>לוח ההתקדמות</h2><div class="hint" style="margin-top:4px">ימים שבהם סימנת לפחות יעד אחד</div></div><div class="monthnav"><button class="iconbtn" id="prevMonth" aria-label="חודש קודם">‹</button><div class="monthlabel" id="monthLabel"></div><button class="iconbtn" id="nextMonth" aria-label="חודש הבא">›</button></div></div>
+ <div class="calendar" id="calendar"></div>
+</section>
+<section class="card">
+ <div class="sectionhead"><h2>הגדרות ופרטיות</h2><span class="hint">נשמר במכשיר הזה</span></div>
+ <div class="settingsrow"><div><div style="font-weight:650;font-size:14px;margin-bottom:5px">תאריך תחילת המסע</div><input class="dateinput" type="date" id="startDate"></div>
+ <div class="settingactions"><button class="btn secondary" id="saveDate">שמירת תאריך</button><button class="btn danger" id="resetStreak">התחלה מחדש</button></div>
+ <div class="settingactions"><button class="btn secondary" id="exportBtn">הורדת גיבוי</button><label class="btn secondary" for="importFile" style="display:grid;place-items:center">שחזור מגיבוי</label><input id="importFile" type="file" accept="application/json" hidden></div>
+ <div class="fine">המידע נשמר במכשיר הזה בלבד ואינו נשלח לשרת. הוא לא מסתנכרן אוטומטית בין מכשירים. ניקוי נתוני האתר עלול למחוק אותו, לכן מומלץ להוריד גיבוי מדי פעם.</div>
+ <button class="linkbtn" id="clearAll">מחיקת כל הנתונים מהמכשיר</button></div>
+</section>
+<footer class="footer fine">ההתקדמות שלך לא נמדדת בשלמות, אלא בנכונות להמשיך.</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+ const KEY="masa-my-progress-v1", $=function(id){return document.getElementById(id)};
+ const iso=function(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+ const today=function(){return iso(new Date())};
+ const parse=function(s){var p=s.split("-").map(Number);return new Date(p[0],p[1]-1,p[2],12)};
+ const days=function(a,b){return Math.max(0,Math.floor((parse(b)-parse(a))/86400000))};
+ const defaults=function(){return {startDate:today(),best:1,goals:[{id:"g1",name:"ללמוד 25 דקות"},{id:"g2",name:"לקום בזמן ולהגיע מוכן"},{id:"g3",name:"פעילות גופנית או אימון"},{id:"g4",name:"להתנהל בכבוד ובביטחון"}],checks:{},commitments:{}}};
+ var data;try{data=JSON.parse(localStorage.getItem(KEY))||defaults()}catch(e){data=defaults()}
+ if(!data.startDate)data.startDate=today();if(!Array.isArray(data.goals))data.goals=defaults().goals;if(!data.checks)data.checks={};if(!data.commitments)data.commitments={};if(!Number.isFinite(data.best))data.best=1;
+ var view=new Date();view.setDate(1),toastTimer;
+ function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+ function streak(){return days(data.startDate,today())+1}
+ function dateText(s){return parse(s).toLocaleDateString("he-IL",{day:"numeric",month:"long",year:"numeric"})}
+ function toast(s){$("toast").textContent=s;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(function(){$("toast").classList.remove("show")},2300)}
+ function main(){var n=streak();data.best=Math.max(data.best,n);$("streak").textContent=n;$("best").textContent=data.best;$("elapsed").textContent=n-1;$("since").textContent=data.startDate===today()?"התחלת היום — כל הכבוד על הצעד הראשון.":"המסע התחיל ב־"+dateText(data.startDate);$("startDate").value=data.startDate;save()}
+ function goals(){var t=today(),checked=data.checks[t]||[],list=$("goalList");list.innerHTML="";data.goals.forEach(function(g){var label=document.createElement("label");label.className="goal"+(checked.indexOf(g.id)>=0?" done":"");var input=document.createElement("input");input.type="checkbox";input.checked=checked.indexOf(g.id)>=0;input.addEventListener("change",function(){var arr=data.checks[t]||[];data.checks[t]=input.checked?arr.concat([g.id]):arr.filter(function(x){return x!==g.id});save();goals();calendar()});var span=document.createElement("span");span.textContent=g.name;var del=document.createElement("button");del.type="button";del.className="remove";del.textContent="×";del.setAttribute("aria-label","מחיקת "+g.name);del.addEventListener("click",function(){if(confirm("למחוק את היעד הזה?")){data.goals=data.goals.filter(function(x){return x.id!==g.id});Object.keys(data.checks).forEach(function(k){data.checks[k]=(data.checks[k]||[]).filter(function(x){return x!==g.id})});save();goals();calendar()}});label.append(input,span,del);list.append(label)});
+ var n=checked.length,total=data.goals.length;$("goalCount").textContent=n+"/"+total;$("goalProgress").style.width=(total?n/total*100:0)+"%";$("goalMessage").textContent=!total?"אפשר להוסיף יעד קטן משלך.":n===total?"כל הכבוד! סימנת את כל היעדים להיום.":n===0?"בחר יעד אחד קטן והתחל ממנו.":"יפה! נשארו עוד "+(total-n)+" יעדים להיום."}
+ function calendar(){var y=view.getFullYear(),m=view.getMonth();$("monthLabel").textContent=view.toLocaleDateString("he-IL",{month:"long",year:"numeric"});var c=$("calendar");c.innerHTML="";["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","ש׳"].forEach(function(w){var e=document.createElement("div");e.className="weekday";e.textContent=w;c.append(e)});var first=new Date(y,m,1),offset=(first.getDay()+6)%7,total=new Date(y,m+1,0).getDate();for(var i=0;i<offset;i++){var empty=document.createElement("div");empty.className="day empty";c.append(empty)}for(var d=1;d<=total;d++){var s=iso(new Date(y,m,d)),e=document.createElement("div"),done=(data.checks[s]||[]).length>0||!!data.commitments[s];e.className="day"+(s===today()?" today":"")+(done?" has":"")+(s>today()?" future":"");var n=document.createElement("span");n.textContent=d;e.append(n);e.title=done?"סימנת יעד ביום הזה":"";c.append(e)}}
+ $("addForm").addEventListener("submit",function(e){e.preventDefault();var n=$("newGoal").value.trim();if(!n)return;if(data.goals.length>=12){toast("אפשר להוסיף עד 12 יעדים.");return}data.goals.push({id:"g"+Date.now(),name:n});$("newGoal").value="";save();goals();calendar();toast("היעד נוסף!")});
+ $("todayBtn").addEventListener("click",function(){data.commitments[today()]=true;save();calendar();$("todayBtn").textContent="סימנת את הבחירה שלך להיום ✓";toast("נשמר. היום בחרת להתקדם צעד נוסף.")});
+ $("saveDate").addEventListener("click",function(){var v=$("startDate").value;if(!v){toast("בחר תאריך התחלה.");return}if(v>today()){toast("תאריך ההתחלה לא יכול להיות בעתיד.");return}data.startDate=v;data.best=Math.max(data.best,days(v,today())+1);save();main();toast("תאריך ההתחלה עודכן.")});
+ $("resetStreak").addEventListener("click",function(){if(confirm("להתחיל מחדש מהיום? השיא האישי יישמר.")){data.best=Math.max(data.best,streak());data.startDate=today();save();main();toast("התחלה חדשה. צעד אחד בכל פעם.")}});
+ $("prevMonth").addEventListener("click",function(){view.setMonth(view.getMonth()-1);calendar()});$("nextMonth").addEventListener("click",function(){view.setMonth(view.getMonth()+1);calendar()});
+ $("exportBtn").addEventListener("click",function(){var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="masa-my-progress-backup.json";a.click();URL.revokeObjectURL(a.href);toast("הגיבוי ירד למכשיר.")});
+ $("importFile").addEventListener("change",function(e){var file=e.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var v=JSON.parse(r.result);if(!v.startDate||!Array.isArray(v.goals)||!v.checks)throw 0;if(!confirm("השחזור יחליף את הנתונים הנוכחיים. להמשיך?"))return;data=Object.assign(defaults(),v);save();render();toast("הגיבוי שוחזר.")}catch(err){toast("קובץ הגיבוי לא תקין.")}e.target.value=""};r.readAsText(file)});
+ $("clearAll").addEventListener("click",function(){if(confirm("למחוק את כל הנתונים מהמכשיר הזה?")){data=defaults();save();render();toast("הנתונים נמחקו.")}});
+ function render(){main();goals();calendar();$("todayBtn").textContent=data.commitments[today()]?"סימנת את הבחירה שלך להיום ✓":"אני בוחר להתקדם היום ✓"}render();
+ if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})})}
+})();
+</script>
+</body></html>
