@@ -96,6 +96,45 @@ body:after{width:340px;height:340px;right:-175px;bottom:9%;background:radial-gra
 @media(hover:none){.card:active{transform:scale(.992);border-color:#ffffff38}.btn:active{filter:brightness(1.12)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
+
+/* Expanded tools and personalization */
+.milestone-card{background:linear-gradient(130deg,#ffffff13,var(--accentSoft),#ffffff04);border-color:#ffffff2a}
+.milestone-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.milestone-title{font-size:20px;font-weight:850;margin-top:3px}
+.milestone-emoji{font-size:30px;filter:drop-shadow(0 6px 14px var(--accentSoft))}
+.milestone-copy{font-size:12px;color:var(--muted);margin-top:12px}
+.milestone-foot{font-size:10px;color:var(--muted);margin-top:7px}
+.focus-card{text-align:center;background:linear-gradient(145deg,#ffffff13,var(--accentSoft),#ffffff05)}
+.focus-mode-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.focus-presets{display:flex;gap:5px}
+.preset-btn{border:1px solid #ffffff20;background:#ffffff09;color:var(--muted);padding:7px 9px;border-radius:10px;font-size:10px}
+.preset-btn.selected{background:var(--accentSoft);border-color:var(--accent);color:var(--text)}
+.focus-time{font-size:clamp(54px,15vw,76px);font-weight:850;letter-spacing:-3px;font-variant-numeric:tabular-nums;margin-top:18px;text-shadow:0 5px 25px var(--accentSoft)}
+.focus-caption{font-size:11px;color:var(--muted);margin-top:2px}
+.focus-actions{justify-content:center}
+.task-form{display:grid;gap:4px}
+.task-filters{display:flex;gap:6px;overflow:auto;padding:12px 0 3px}
+.task-filter{white-space:nowrap;border:1px solid #ffffff1c;background:#ffffff08;color:var(--muted);padding:7px 11px;border-radius:20px;font-size:10px}
+.task-filter.selected{color:var(--text);background:var(--accentSoft);border-color:var(--accent)}
+.task-row{display:flex;align-items:center;gap:10px;padding:10px;border-radius:13px;background:#ffffff07;border:1px solid #ffffff12}
+.task-row.done{opacity:.62}
+.task-row input{width:19px;height:19px;accent-color:var(--accent);flex:none}
+.task-copy{flex:1;min-width:0}
+.task-copy strong{display:block;font-size:12px;overflow-wrap:anywhere}
+.task-copy small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.task-row.done strong{text-decoration:line-through}
+.task-overdue{color:var(--danger)!important}
+.long-goal{padding:12px;border:1px solid #ffffff15;border-radius:14px;background:#ffffff07}
+.long-goal-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.long-goal strong{font-size:12px;display:block}
+.long-goal small{font-size:10px;color:var(--muted)}
+.long-goal input[type=range]{width:100%;accent-color:var(--accent);margin:12px 0 3px}
+.color-row{display:flex;align-items:center;gap:10px}
+.color-row input[type=color]{width:48px;height:38px;border:1px solid var(--line);border-radius:10px;padding:3px;background:#ffffff0a}
+.tabs{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media(min-width:680px){.tabs{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.hero,.brand-mark,.brand-mark:after,body:before,body:after{animation:none!important}}
+.reduce-motion *, .reduce-motion *:before, .reduce-motion *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 </style>
 </head>
 <body>
@@ -119,6 +158,8 @@ body:after{width:340px;height:340px;right:-175px;bottom:9%;background:radial-gra
   <div class="card metric"><div class="metric-icon">💪</div><div class="metric-label">אימונים השבוע</div><div class="metric-value" id="workoutsWeek">0</div><div class="metric-note">מפגשי פעילות</div></div>
   <div class="card metric"><div class="metric-icon">✅</div><div class="metric-label">יעדים שהושלמו היום</div><div class="metric-value" id="goalsToday">0/0</div><div class="metric-note">כל צעד נחשב</div></div>
  </div>
+ <div class="section-title"><h2>אבני הדרך שלי</h2><span class="tiny">כל התקדמות נחשבת</span></div>
+ <div class="card milestone-card"><div class="milestone-top"><div><div class="tiny">היעד הבא שלך</div><div class="milestone-title" id="milestoneTitle">שבוע ראשון</div></div><div class="milestone-emoji" id="milestoneEmoji">🌱</div></div><div class="milestone-copy" id="milestoneCopy">כל יום הוא צעד נוסף במסע.</div><div class="progress-line"><div class="progress-fill" id="milestoneProgress"></div></div><div class="milestone-foot" id="milestoneFoot">0 מתוך 7 ימים</div></div>
  <div class="section-title"><h2>היעדים שלי להיום</h2><button class="small-link" data-go="habits">ניהול יעדים ←</button></div>
  <div class="card"><div class="tiny" id="goalSummary">התקדמות יומית</div><div class="progress-line"><div class="progress-fill" id="goalProgress"></div></div><div class="goal-list" id="goalList"></div><form class="inline-form" id="addGoalForm"><input class="field" id="newGoal" maxlength="52" placeholder="הוסף יעד קטן להיום..." autocomplete="off"><button class="btn btn-soft" type="submit">הוסף</button></form></div>
  <div class="section-title"><h2>השבוע שלך</h2><button class="small-link" data-go="stats">לכל הנתונים ←</button></div>
@@ -152,10 +193,12 @@ body:after{width:340px;height:340px;right:-175px;bottom:9%;background:radial-gra
  <div class="card">
   <div class="field-wrap"><label class="field-label" for="journalDate">תאריך</label><input class="field" type="date" id="journalDate"></div>
   <div class="field-wrap" style="margin-top:11px"><label class="field-label" for="journalText">מה עובר עליי היום?</label><textarea class="textarea" id="journalText" maxlength="5000" placeholder="אפשר לכתוב על משהו שהצלחתי בו, משהו שהיה קשה, מחשבה או מטרה למחר..."></textarea></div>
+  <div class="field-wrap" style="margin-top:11px"><label class="field-label" for="journalMood">איך עבר עליי היום?</label><select class="select" id="journalMood"><option value="">לא רוצה לסמן</option><option value="😊">😊 טוב ומרוצה</option><option value="🙂">🙂 בסדר</option><option value="😐">😐 יום רגיל</option><option value="😔">😔 היה לי קשה</option><option value="😤">😤 מתוח או מתוסכל</option><option value="🔥">🔥 מלא מוטיבציה</option></select></div>
   <div class="tiny" id="journalCount" style="margin-top:6px">0 / 5000</div>
   <div class="inline-form"><button class="btn btn-primary" id="saveJournal">שמירת הרשומה</button><button class="btn btn-quiet" id="clearJournal">ניקוי</button></div>
  </div>
  <div class="section-title"><h2>רשומות קודמות</h2><span class="tiny" id="journalTotal">0 רשומות</span></div>
+ <input class="field" id="journalSearch" style="margin-bottom:10px" placeholder="חיפוש ברשומות היומן..." autocomplete="off">
  <div class="card" id="journalEntries"><div class="empty-state">הרשומות שתכתוב יופיעו כאן.</div></div>
  <div class="notice" style="margin-top:12px">היומן אישי ונשמר במכשיר שלך. כדאי להפעיל נעילת קוד בהגדרות אם אתה רוצה להוסיף שכבת פרטיות.</div>
 </section>
@@ -172,6 +215,34 @@ body:after{width:340px;height:340px;right:-175px;bottom:9%;background:radial-gra
   <div class="field-wrap" style="margin-top:10px"><label class="field-label" for="activityNote">הערה (לא חובה)</label><input class="field" id="activityNote" maxlength="160" placeholder="איך היה? מה למדתי?"></div>
   <div class="inline-form"><button class="btn btn-primary" id="addActivity">שמירת הפעילות</button></div>
  </div>
+ <div class="section-title"><h2>טיימר ריכוז</h2><span class="tiny">זמן לעצמך, בלי הסחות דעת</span></div>
+ <div class="card focus-card">
+  <div class="focus-mode-row"><select class="select" id="focusMode" style="max-width:145px"><option value="study">📚 זמן לימוד</option><option value="break">☕ הפסקה</option></select><div class="focus-presets"><button type="button" class="preset-btn" data-focus-min="15">15</button><button type="button" class="preset-btn selected" data-focus-min="25">25</button><button type="button" class="preset-btn" data-focus-min="45">45</button><button type="button" class="preset-btn" data-focus-min="60">60</button></div></div>
+  <div class="focus-time" id="focusTime">25:00</div><div class="focus-caption" id="focusCaption">מיקוד מלא למשך 25 דקות</div><div class="progress-line"><div class="progress-fill" id="focusProgress"></div></div>
+  <div class="inline-form focus-actions"><button type="button" class="btn btn-primary" id="focusStart">התחלה</button><button type="button" class="btn btn-soft" id="focusPause">השהיה</button><button type="button" class="btn btn-quiet" id="focusReset">איפוס</button></div>
+  <div class="tiny" id="focusSessions" style="margin-top:10px">עוד לא השלמת סשן ריכוז היום.</div>
+ </div>
+ <div class="section-title"><h2>המשימות שלי</h2><span class="tiny" id="taskSummary">0 משימות פתוחות</span></div>
+ <div class="card">
+  <form id="taskForm" class="task-form">
+   <input class="field" id="taskTitle" maxlength="100" placeholder="מה חשוב לך להספיק?" required>
+   <div class="form-grid" style="margin-top:8px">
+    <div class="field-wrap"><label class="field-label" for="taskDate">תאריך</label><input class="field" type="date" id="taskDate"></div>
+    <div class="field-wrap"><label class="field-label" for="taskCategory">קטגוריה</label><select class="select" id="taskCategory"><option value="personal">אישי</option><option value="study">לימודים</option><option value="workout">אימון</option><option value="home">בית</option></select></div>
+   </div>
+   <div class="inline-form"><button class="btn btn-primary" type="submit">＋ הוספת משימה</button></div>
+  </form>
+  <div class="task-filters"><button type="button" class="task-filter selected" data-task-filter="open">פתוחות</button><button type="button" class="task-filter" data-task-filter="today">היום</button><button type="button" class="task-filter" data-task-filter="done">הושלמו</button><button type="button" class="task-filter" data-task-filter="all">הכול</button></div>
+  <div id="taskList" class="activity-list"><div class="empty-state">אין כרגע משימות. הוסף משימה אחת כדי להתחיל.</div></div>
+ </div>
+ <div class="section-title"><h2>מטרות גדולות</h2><span class="tiny">דברים שאני בונה לטווח ארוך</span></div>
+ <div class="card">
+  <form id="longGoalForm" class="task-form">
+   <input class="field" id="longGoalTitle" maxlength="90" placeholder="למשל: להשתפר בצילום / לסיים קורס" required>
+   <div class="inline-form"><input class="field" type="date" id="longGoalDate" aria-label="תאריך יעד"><button class="btn btn-soft" type="submit">הוספת מטרה</button></div>
+  </form>
+  <div class="activity-list" id="longGoalList"><div class="empty-state">בחר מטרה אחת שחשובה לך והתחל להתקדם אליה.</div></div>
+ </div>
  <div class="section-title"><h2>הפעילויות האחרונות</h2><span class="tiny" id="activityTotal">0 פעילויות</span></div>
  <div class="card"><div class="activity-list" id="activityList"><div class="empty-state">עדיין לא תיעדת פעילות. האימון או הלימוד הבא שלך יכולים להתחיל כאן.</div></div></div>
 </section>
@@ -187,6 +258,9 @@ body:after{width:340px;height:340px;right:-175px;bottom:9%;background:radial-gra
    <button class="theme-choice" data-theme-choice="forest"><span class="swatches"><i class="swatch" style="background:#86d9a4"></i><i class="swatch" style="background:#d4e889"></i></span>יער</button>
   </div>
  </div>
+ <div class="field-wrap" style="margin-top:13px"><label class="field-label" for="customAccent">צבע הדגשה אישי</label><div class="color-row"><input type="color" id="customAccent" value="#a78bfa"><span class="tiny">בחר צבע משלך.</span></div></div>
+ <div class="field-wrap" style="margin-top:13px"><label class="field-label" for="displayName">איך לקרוא לך באפליקציה?</label><div class="inline-form"><input class="field" id="displayName" maxlength="24" placeholder="שם או כינוי"><button class="btn btn-soft" id="saveDisplayName" type="button">שמירה</button></div></div>
+ <div class="setting-row"><div class="setting-copy"><strong>הפחתת אנימציות</strong><small>פחות תנועה ואפקטים חזותיים.</small></div><input type="checkbox" class="toggle" id="reduceMotion"></div>
  <div class="section-title"><h2>תזכורות</h2></div>
  <div class="card">
   <div class="setting-row"><div class="setting-copy"><strong>תזכורת יומית</strong><small>תזכורת כשהאפליקציה פתוחה ופעילה.</small></div><input type="checkbox" class="toggle" id="reminderEnabled"></div>
@@ -222,6 +296,7 @@ body:after{width:340px;height:340px;right:-175px;bottom:9%;background:radial-gra
  <button class="tab active" data-page="home"><span class="ico">⌂</span>בית</button>
  <button class="tab" data-page="habits"><span class="ico">✓</span>יעדים</button>
  <button class="tab" data-page="activity"><span class="ico">◷</span>פעילות</button>
+ <button class="tab" data-page="journal"><span class="ico">✎</span>יומן</button>
  <button class="tab" data-page="stats"><span class="ico">▥</span>נתונים</button>
  <button class="tab" data-page="settings"><span class="ico">⚙</span>הגדרות</button>
 </nav>
@@ -249,10 +324,10 @@ const dateKey=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+
 const today=()=>dateKey(new Date()), parseDate=s=>{const p=String(s||"").split("-").map(Number);return new Date(p[0],p[1]-1,p[2],12)};
 const dayDiff=(a,b)=>Math.max(0,Math.floor((parseDate(b)-parseDate(a))/86400000));
 const dateLabel=s=>parseDate(s).toLocaleDateString("he-IL",{day:"numeric",month:"long",year:"numeric"});
-const defaultData=()=>({version:2,startDate:today(),best:1,goals:[{id:"g1",name:"ללמוד 25 דקות"},{id:"g2",name:"לקום בזמן ולהגיע מוכן"},{id:"g3",name:"פעילות גופנית או אימון"},{id:"g4",name:"להתנהל בכבוד ובביטחון"}],checks:{},commitments:{},journal:{},activities:[],prefs:{theme:"violet",reminderEnabled:false,reminderTime:"20:30",lastReminderDate:""}});
-function normalize(v){const d=defaultData();if(!v||typeof v!=="object")return d;return {...d,...v,goals:Array.isArray(v.goals)?v.goals:d.goals,checks:v.checks&&typeof v.checks==="object"?v.checks:{},commitments:v.commitments&&typeof v.commitments==="object"?v.commitments:{},journal:v.journal&&typeof v.journal==="object"?v.journal:{},activities:Array.isArray(v.activities)?v.activities:[],prefs:{...d.prefs,...(v.prefs||{})}}}
+const defaultData=()=>({version:3,startDate:today(),best:1,goals:[{id:"g1",name:"ללמוד 25 דקות"},{id:"g2",name:"לקום בזמן ולהגיע מוכן"},{id:"g3",name:"פעילות גופנית או אימון"},{id:"g4",name:"להתנהל בכבוד ובביטחון"}],checks:{},commitments:{},journal:{},moods:{},activities:[],tasks:[],longGoals:[],focusTimer:{duration:25,remaining:1500,running:false,endsAt:null,mode:"study"},prefs:{theme:"violet",customAccent:"#a78bfa",displayName:"",reducedMotion:false,reminderEnabled:false,reminderTime:"20:30",lastReminderDate:""}});
+function normalize(v){const d=defaultData();if(!v||typeof v!=="object")return d;return {...d,...v,version:3,goals:Array.isArray(v.goals)?v.goals:d.goals,checks:v.checks&&typeof v.checks==="object"?v.checks:{},commitments:v.commitments&&typeof v.commitments==="object"?v.commitments:{},journal:v.journal&&typeof v.journal==="object"?v.journal:{},moods:v.moods&&typeof v.moods==="object"?v.moods:{},activities:Array.isArray(v.activities)?v.activities:[],tasks:Array.isArray(v.tasks)?v.tasks:[],longGoals:Array.isArray(v.longGoals)?v.longGoals:[],focusTimer:v.focusTimer&&typeof v.focusTimer==="object"?{...d.focusTimer,...v.focusTimer}:d.focusTimer,prefs:{...d.prefs,...(v.prefs||{})}}}
 let data=null,vault=null,vaultMeta=null,saveQueue=Promise.resolve(),toastTimer=null,calendarView=new Date(new Date().getFullYear(),new Date().getMonth(),1),activePage="home",reminderTimer=null;
-function b64(buf){return btoa(String.fromCharCode.apply(null,new Uint8Array(buf)))}
+function b64(buf){const bytes=new Uint8Array(buf);let binary="";for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary)}
 function unb64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0))}
 async function deriveVaultKey(pin,salt){const material=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:220000,hash:"SHA-256"},material,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
 async function encryptSnapshot(snapshot){const iv=crypto.getRandomValues(new Uint8Array(12));const encrypted=await crypto.subtle.encrypt({name:"AES-GCM",iv},vault.key,new TextEncoder().encode(snapshot));localStorage.setItem(KEY,JSON.stringify({_vault:true,version:1,salt:vault.salt,iv:b64(iv),cipher:b64(encrypted)}))}
