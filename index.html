@@ -380,9 +380,7 @@ $("addActivity").addEventListener("click",()=>{const type=$("activityType").valu
 $("prevMonth").addEventListener("click",()=>{calendarView.setMonth(calendarView.getMonth()-1);renderCalendar()});$("nextMonth").addEventListener("click",()=>{calendarView.setMonth(calendarView.getMonth()+1);renderCalendar()});
 $("journalSearch").addEventListener("input",renderJournalEntries);
 $("customAccent").addEventListener("input",e=>{data.prefs.theme="custom";data.prefs.customAccent=e.target.value;save();applyTheme()});
-$("displayName").value=data.prefs.displayName||"";
 $("saveDisplayName").addEventListener("click",()=>{data.prefs.displayName=$("displayName").value.trim().slice(0,24);save();renderHome();showToast("הכינוי נשמר.")});
-$("reduceMotion").checked=!!data.prefs.reducedMotion;
 $("reduceMotion").addEventListener("change",e=>{data.prefs.reducedMotion=e.target.checked;save();applyTheme();showToast(e.target.checked?"האנימציות הופחתו.":"האנימציות הופעלו.")});
 $("taskDate").value=today();
 $("taskForm").addEventListener("submit",e=>{e.preventDefault();const title=$("taskTitle").value.trim();if(!title)return;data.tasks.push({id:"task-"+Date.now(),title,date:$("taskDate").value||today(),category:$("taskCategory").value,done:false});$("taskTitle").value="";save();renderTasks();showToast("המשימה נוספה.")});
