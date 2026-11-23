@@ -22,6 +22,16 @@
 @media(max-width:380px){.hero{padding:17px}.hero-bottom{align-items:flex-start;flex-direction:column}.hero-number{font-size:78px}.themes{gap:5px}.theme-choice{font-size:9px}.form-grid{grid-template-columns:1fr}}
 
 /* Liquid Glass 3D polish */
+/* Extra motion + endless stopwatch polish */
+.stopwatch-card{transform-style:preserve-3d;animation:stopwatchCardFloat 8s ease-in-out infinite;}
+.stopwatch-dial{transition:filter .35s,box-shadow .35s;}
+.stopwatch-card:focus-within .stopwatch-dial,.stopwatch-card:hover .stopwatch-dial{filter:saturate(1.25);box-shadow:0 0 42px var(--accentSoft),inset 0 1px 2px #ffffffc4,0 20px 45px #02061755;}
+.stopwatch-display{animation:stopwatchTextGlow 5s ease-in-out infinite alternate;}
+.stopwatch-chip{box-shadow:inset 0 1px 0 #ffffff22,0 8px 20px #02061722;}
+@keyframes stopwatchCardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes stopwatchTextGlow{0%{text-shadow:0 0 12px var(--accentSoft)}100%{text-shadow:0 0 25px var(--accent),0 0 38px var(--accentSoft)}}
+@media(prefers-reduced-motion:reduce){.stopwatch-card,.stopwatch-display{animation:none!important}}
+
 :root{--glass:rgba(255,255,255,.075);--glass-edge:rgba(255,255,255,.19);--glass-highlight:rgba(255,255,255,.27);--shadow:0 24px 64px #02061788, inset 0 1px 0 #ffffff18}
 body{isolation:isolate;overflow-x:hidden;background:radial-gradient(720px 460px at 100% -10%,var(--accentSoft),transparent 68%),radial-gradient(620px 380px at -12% 35%,#38bdf812,transparent 68%),linear-gradient(145deg,#0a1020,#111a2e 48%,#0a1523)}
 body:before,body:after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(3px);opacity:.34;will-change:transform}
