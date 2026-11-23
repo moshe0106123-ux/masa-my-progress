@@ -237,11 +237,11 @@ body:after{width:370px;height:370px;right:-220px;bottom:15%;opacity:.2;filter:bl
 .home-task-more{border-top:1px solid #ffffff10;margin-top:2px;padding-top:10px}
 
 /* Swipe-to-delete: reveal a clear delete action without accidental removal. */
-.swipe-shell{position:relative;display:block;width:100%;overflow:hidden;border-radius:14px;touch-action:pan-y;isolation:isolate}
-.swipe-content{position:relative;z-index:1;min-width:0;transition:transform .24s cubic-bezier(.2,.8,.2,1);will-change:transform}
-.swipe-shell.swipe-open .swipe-content{transform:translate3d(-84px,0,0)}
+.swipe-shell{position:relative;display:block;width:100%;overflow:hidden;border-radius:18px;touch-action:pan-y;isolation:isolate}
+.swipe-content{position:relative;z-index:1;min-width:0;transition:transform .34s cubic-bezier(.22,.8,.25,1);will-change:transform}
+.swipe-shell.swipe-open .swipe-content{transform:translate3d(-96px,0,0)}
 .swipe-shell.swipe-dragging .swipe-content{transition:none}
-.swipe-delete{position:absolute;z-index:2;right:0;top:0;bottom:0;width:84px;border:0;border-radius:0 12px 12px 0;background:linear-gradient(145deg,#ff9eaa,#e75b70);color:#281018;font-size:12px;font-weight:850;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 #ffffff88;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .18s}.swipe-shell.swipe-open .swipe-delete{opacity:1;pointer-events:auto}
+.swipe-delete{position:absolute;z-index:2;right:5px;top:5px;bottom:5px;width:86px;border:0;border-radius:16px;background:linear-gradient(145deg,#ff9eaa,#e75b70);color:#281018;font-size:12px;font-weight:850;display:flex;align-items:center;justify-content:center;box-shadow:0 7px 18px #e75b7040,inset 0 1px 0 #ffffff88;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .22s,transform .3s cubic-bezier(.22,.8,.25,1);transform:scale(.92)}.swipe-shell.swipe-open .swipe-delete{opacity:1;pointer-events:auto;transform:scale(1)}
 .swipe-delete:active{filter:brightness(.92)}
 .swipe-content>.goal-item,.swipe-content>.task-row,.swipe-content>.activity-item,.swipe-content>.long-goal,.swipe-content>.entry,.swipe-content>.home-task-row{width:100%}
 .swipe-hint{font-size:10px;color:var(--muted);margin:8px 2px 0}
@@ -500,7 +500,7 @@ function enableSwipeDelete(row,onDelete,label){
   }
   if(axis==="x"){
    e.preventDefault();
-   const base=start.wasOpen?-84:0,offset=Math.max(-84,Math.min(0,base+dx));
+   const base=start.wasOpen?-96:0,offset=Math.max(-96,Math.min(0,base+dx));
    shell.classList.add("swipe-dragging");content.style.transform="translate3d("+offset+"px,0,0)";
   }
  });
@@ -509,7 +509,7 @@ function enableSwipeDelete(row,onDelete,label){
   const dx=e.clientX-start.x;
   if(axis==="x"){
    suppressClick=Math.abs(dx)>12;
-   const shouldOpen=start.wasOpen?dx<36:dx<-42;
+   const shouldOpen=start.wasOpen?dx<40:dx<-48;
    shell.classList.remove("swipe-dragging");shell.classList.toggle("swipe-open",shouldOpen);content.style.transform="";
    action.tabIndex=shouldOpen?0:-1;action.setAttribute("aria-hidden",shouldOpen?"false":"true");
    activeSwipeShell=shouldOpen?shell:null;
