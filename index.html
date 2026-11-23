@@ -23,12 +23,7 @@
 
 /* Liquid Glass 3D polish */
 /* Extra motion + endless stopwatch polish */
-/* Stopwatch smoothness fix */
-.stopwatch-card{animation:none!important;}
-.stopwatch-display{animation:none!important;text-shadow:0 0 16px var(--accentSoft);transition:text-shadow .35s ease;}
-.stopwatch-dial{animation:none!important;transition:box-shadow .35s ease,filter .35s ease;}
-.stopwatch-lap{animation:none!important;}
-.stopwatch-card:hover .stopwatch-dial{box-shadow:0 0 24px var(--accentSoft),inset 0 1px 2px #ffffff22;}
+/* Stopwatch motion: animations are allowed, with accessibility overrides at the end. */
 
 .stopwatch-card{transform-style:preserve-3d;animation:stopwatchCardFloat 8s ease-in-out infinite;}
 .stopwatch-dial{transition:filter .35s,box-shadow .35s;}
@@ -186,6 +181,10 @@ body:after{width:370px;height:370px;right:-220px;bottom:15%;opacity:.2;filter:bl
 @keyframes dialSpin{to{transform:rotate(360deg)}}
 @media(max-width:360px){.stopwatch-actions{gap:4px}.stopwatch-actions .btn{font-size:10px}.stopwatch-dial{width:235px}}
 @media(prefers-reduced-motion:reduce){.stopwatch-card:after,.live-dot,.stopwatch-infinity,.stopwatch-dial,.stopwatch-dial:before{animation:none!important}}
+
+/* Global motion reduction + animation cleanup */
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.reduce-motion *, .reduce-motion *:before, .reduce-motion *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 
 /* Clean mint-and-teal journey logo */
 .brand-mark{padding:0;background:none!important;border:1px solid #ffffff58;box-shadow:0 8px 24px #20c7b955,inset 0 1px 1px #ffffff55;animation:none!important}
