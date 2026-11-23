@@ -271,6 +271,13 @@ input[type="time"]::-webkit-date-and-time-value{
  min-height:1.35em;
 }
 
+
+/* Give native date controls a full grid row on narrow layouts so iOS never clips the date box. */
+.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.form-grid .field-wrap:has(input[type="date"]){grid-column:1/-1}
+.form-grid .field-wrap:has(input[type="date"]) input[type="date"]{width:100%;max-width:100%;min-width:0;display:block}
+@media(max-width:380px){.form-grid{grid-template-columns:minmax(0,1fr)}.form-grid .field-wrap:has(input[type="date"]){grid-column:auto}}
+
 </style>
 </head>
 <body>
