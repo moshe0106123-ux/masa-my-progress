@@ -489,7 +489,7 @@ function enableSwipeDelete(row,onDelete,label){
  const content=document.createElement("div");content.className="swipe-content";
  row.parentNode.insertBefore(shell,row);shell.append(content);content.append(row);
  const action=document.createElement("button");action.type="button";action.className="swipe-delete";action.tabIndex=-1;action.setAttribute("aria-hidden","true");action.setAttribute("aria-label","מחק "+label);
- const icon=document.createElement("span");icon.className="swipe-delete-icon";icon.textContent="▤";
+ const icon=document.createElement("span");icon.className="swipe-delete-icon";icon.textContent="🗑️";
  const buttonLabel=document.createElement("span");buttonLabel.className="swipe-delete-label";buttonLabel.textContent="מחק";
  action.append(icon,buttonLabel);
  action.addEventListener("click",e=>{e.stopPropagation();closeSwipeShell(shell);onDelete()});
