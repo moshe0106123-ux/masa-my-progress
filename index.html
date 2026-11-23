@@ -272,11 +272,15 @@ input[type="time"]::-webkit-date-and-time-value{
 }
 
 
-/* Give native date controls a full grid row on narrow layouts so iOS never clips the date box. */
-.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.form-grid .field-wrap:has(input[type="date"]){grid-column:1/-1}
-.form-grid .field-wrap:has(input[type="date"]) input[type="date"]{width:100%;max-width:100%;min-width:0;display:block}
-@media(max-width:380px){.form-grid{grid-template-columns:minmax(0,1fr)}.form-grid .field-wrap:has(input[type="date"]){grid-column:auto}}
+/* Mobile forms: use one full-width column so native iOS date controls cannot be clipped. */
+input[type="date"]{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+@media(max-width:520px){
+ .form-grid{grid-template-columns:minmax(0,1fr)!important}
+ .form-grid>.field-wrap{grid-column:1!important;width:100%;min-width:0}
+ .form-grid>.field-wrap>*{min-width:0;max-width:100%}
+}
+.date-inline-row{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%}
+.date-inline-row input[type="date"],.date-inline-row button{width:100%;min-width:0;max-width:100%}
 
 </style>
 </head>
@@ -400,7 +404,7 @@ input[type="time"]::-webkit-date-and-time-value{
  <div class="card">
   <form id="longGoalForm" class="task-form">
    <input class="field" id="longGoalTitle" maxlength="90" placeholder="למשל: להשתפר בצילום / לסיים קורס" required>
-   <div class="inline-form"><input class="field" type="date" id="longGoalDate" aria-label="תאריך יעד"><button class="btn btn-soft" type="submit">הוספת מטרה</button></div>
+   <div class="inline-form date-inline-row"><input class="field" type="date" id="longGoalDate" aria-label="תאריך יעד"><button class="btn btn-soft" type="submit">הוספת מטרה</button></div>
   </form>
   <div class="activity-list" id="longGoalList"><div class="empty-state">בחר מטרה אחת שחשובה לך והתחל להתקדם אליה.</div></div>
  </div>
@@ -609,7 +613,7 @@ function renderHomeTasks(){
 function renderHome(){const streak=countStreak();data.best=Math.max(Number(data.best)||1,streak);renderMilestone();$("streak").textContent=streak;$("best").textContent=data.best;$("startDateText").textContent="התחלת את המסע ב־"+dateLabel(data.startDate);$("helloText").textContent=new Date().toLocaleDateString("he-IL",{weekday:"long",day:"numeric",month:"long"} )+" · "+(data.prefs.displayName?"שלום "+data.prefs.displayName+", ":"")+"היום הוא הזדמנות חדשה להתקדם.";const checked=(data.checks[today()]||[]).length,total=data.goals.length;$("goalsToday").textContent=checked+"/"+total;$("goalSummary").textContent="הושלמו "+checked+" מתוך "+total+" יעדים להיום";$("goalProgress").style.width=(total?checked/total*100:0)+"%";$("studyWeek").textContent=data.activities.filter(a=>a.type==="study"&&weekKeys().includes(a.date)).reduce((n,a)=>n+Number(a.minutes||0),0)+" דק׳";$("workoutsWeek").textContent=data.activities.filter(a=>a.type==="workout"&&weekKeys().includes(a.date)).length;$("journalPreview").textContent=data.journal[today()]?String(data.journal[today()]).slice(0,150):"עוד לא כתבת ביומן היום. כמה שורות לעצמך יכולות לעשות סדר.";renderGoalList("goalList",true);renderChart("homeChart");$("dailyCommit").textContent=data.commitments[today()]?"✓ סימנת התקדמות להיום":"✦ אני מתקדם היום";renderHomeTasks()}
 function renderStats(){const week=weekKeys();const study=data.activities.filter(a=>a.type==="study"&&week.includes(a.date)).reduce((n,a)=>n+Number(a.minutes||0),0);const workouts=data.activities.filter(a=>a.type==="workout"&&week.includes(a.date)).length;const checks=week.reduce((n,k)=>n+(data.checks[k]||[]).length,0);const now=new Date(),monthPrefix=dateKey(new Date(now.getFullYear(),now.getMonth(),1)).slice(0,7);const activeDays=new Set(Object.keys({...data.checks,...data.journal,...data.commitments}).filter(k=>k.startsWith(monthPrefix)&&activeOn(k)));data.activities.filter(a=>a.date.startsWith(monthPrefix)).forEach(a=>activeDays.add(a.date));const active=activeDays.size;$("studyTotal").textContent=study;$("workoutTotal").textContent=workouts;$("checksTotal").textContent=checks;$("activeMonth").textContent=active;renderChart("statsChart");renderCalendar()}
 function editorField(label,name,type,value,options){
- const wrap=document.createElement("div");wrap.className="field-wrap";
+ const wrap=document.createElement("div");wrap.className="field-wrap"+(name==="date"?" field-wrap-date":"");
  const caption=document.createElement("label");caption.className="field-label";caption.htmlFor="edit-"+name;caption.textContent=label;
  let input;
  if(type==="select"){input=document.createElement("select");input.className="select";(options||[]).forEach(([v,t])=>{const option=document.createElement("option");option.value=v;option.textContent=t;input.append(option)})}
