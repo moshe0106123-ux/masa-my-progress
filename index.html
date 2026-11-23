@@ -65,7 +65,7 @@ button,input{font:inherit}button{cursor:pointer}.wrap{width:min(100% - 28px,760p
  const defaults=function(){return {startDate:today(),best:1,goals:[{id:"g1",name:"ללמוד 25 דקות"},{id:"g2",name:"לקום בזמן ולהגיע מוכן"},{id:"g3",name:"פעילות גופנית או אימון"},{id:"g4",name:"להתנהל בכבוד ובביטחון"}],checks:{},commitments:{}}};
  var data;try{data=JSON.parse(localStorage.getItem(KEY))||defaults()}catch(e){data=defaults()}
  if(!data.startDate)data.startDate=today();if(!Array.isArray(data.goals))data.goals=defaults().goals;if(!data.checks)data.checks={};if(!data.commitments)data.commitments={};if(!Number.isFinite(data.best))data.best=1;
- var view=new Date();view.setDate(1),toastTimer;
+ var view=new Date(),toastTimer;view.setDate(1);
  function save(){localStorage.setItem(KEY,JSON.stringify(data))}
  function streak(){return days(data.startDate,today())+1}
  function dateText(s){return parse(s).toLocaleDateString("he-IL",{day:"numeric",month:"long",year:"numeric"})}
