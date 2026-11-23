@@ -504,7 +504,7 @@ function saveEditedRecord(event){
   const item=data.tasks.find(x=>String(x.id)===editingId),title=get("title").trim();if(!item||!title){showToast("צריך לתת למשימה שם.");return}
   Object.assign(item,{title,date:get("date"),category:get("category")});
  }
- closeEditor();save();renderAll();showToast(editingKind==="activity"?"הפעילות עודכנה.":"המשימה עודכנה.");
+ const savedKind=editingKind;closeEditor();save();renderAll();showToast(savedKind==="activity"?"הפעילות עודכנה.":"המשימה עודכנה.");
 }
 function renderCalendar(){
  const y=calendarView.getFullYear(),m=calendarView.getMonth(),monthKey=y+"-"+String(m+1).padStart(2,"0");
