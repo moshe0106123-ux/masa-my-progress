@@ -254,6 +254,23 @@ body:after{width:370px;height:370px;right:-220px;bottom:15%;opacity:.2;filter:bl
 .task-section-anchor{scroll-margin-top:18px}
 /* Swipe opens only after a deliberate horizontal gesture, never on focus. */
 
+
+/* Native date/time controls: keep their internal segments LTR inside the RTL app. */
+input[type="date"],input[type="time"]{
+ direction:ltr;
+ unicode-bidi:isolate;
+ text-align:center;
+ text-align-last:center;
+ font-variant-numeric:tabular-nums;
+ min-width:0;
+}
+input[type="date"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value{
+ direction:ltr;
+ text-align:center;
+ min-height:1.35em;
+}
+
 </style>
 </head>
 <body>
