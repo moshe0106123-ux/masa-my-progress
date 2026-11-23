@@ -2,7 +2,7 @@
   "id": "./",
   "name": "המסע שלי",
   "short_name": "המסע שלי",
-  "description": "המרחב האישי שלך להתקדמות, הרגלים ומטרות יומיות.",
+  "description": "המרחב האישי שלך למטרות, הרגלים, יומן והתקדמות.",
   "lang": "he",
   "dir": "rtl",
   "start_url": "./",
@@ -13,8 +13,8 @@
     "minimal-ui"
   ],
   "orientation": "portrait",
-  "background_color": "#0b121b",
-  "theme_color": "#101a25",
+  "background_color": "#0b1020",
+  "theme_color": "#111827",
   "icons": [
     {
       "src": "icon-192.png",
