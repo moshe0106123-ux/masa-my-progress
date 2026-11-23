@@ -1,4 +1,4 @@
-const CACHE='masa-progress-v2';
+const CACHE='masa-progress-v3';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./apple-touch-icon.png','./icon-192.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
