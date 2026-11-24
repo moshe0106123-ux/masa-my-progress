@@ -406,6 +406,15 @@ body{margin:0;height:100dvh;padding:0!important;overscroll-behavior:none}
 }
 .ios-standalone #lockScreen .lock-card{margin:auto}
 
+
+.toast{display:flex;align-items:center;justify-content:center;gap:12px}
+.toast-action{flex:none;border:1px solid #11182725;border-radius:10px;padding:7px 11px;background:#17223a;color:#fff;font:inherit;font-size:11px;font-weight:850}
+
+
+.home-task-row.done{opacity:.68;border-color:#71e2b844;background:#71e2b80d}
+.home-task-row.done .home-task-copy strong{text-decoration:line-through;color:var(--muted)}
+.home-task-completed-title{font-size:10px;font-weight:850;color:var(--good);padding:8px 2px 0;border-top:1px solid #ffffff12;margin-top:3px}
+
 </style>
 </head>
 <body>
@@ -729,7 +738,16 @@ function unb64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0))}
 async function deriveVaultKey(pin,salt){const material=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:220000,hash:"SHA-256"},material,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
 async function encryptSnapshot(snapshot){const iv=crypto.getRandomValues(new Uint8Array(12));const encrypted=await crypto.subtle.encrypt({name:"AES-GCM",iv},vault.key,new TextEncoder().encode(snapshot));localStorage.setItem(KEY,JSON.stringify({_vault:true,version:1,salt:vault.salt,iv:b64(iv),cipher:b64(encrypted)}))}
 function save(){if(!data)return Promise.resolve();const snapshot=JSON.stringify(data);saveQueue=saveQueue.then(async()=>{try{if(vault)await encryptSnapshot(snapshot);else localStorage.setItem(KEY,snapshot)}catch(e){toast("לא ניתן לשמור כרגע. בדוק מקום פנוי במכשיר.")}});return saveQueue}
-function showToast(s){$("toast").textContent=s;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2500)}
+function showToast(s,actionLabel,action){
+ const root=$("toast");root.replaceChildren();
+ const message=document.createElement("span");message.textContent=s;root.append(message);
+ if(actionLabel&&typeof action==="function"){
+  const button=document.createElement("button");button.type="button";button.className="toast-action";button.textContent=actionLabel;
+  button.addEventListener("click",()=>{clearTimeout(toastTimer);root.classList.remove("show");action()},{once:true});
+  root.append(button);
+ }
+ root.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>root.classList.remove("show"),4000);
+}
 function closeSwipeShell(shell){
  if(!shell)return;
  shell.classList.remove("swipe-open","swipe-dragging");
@@ -796,14 +814,20 @@ function minutesOn(day){return activitiesOn(day).reduce((n,a)=>n+(Number(a.minut
 function activeOn(day){return (data.checks[day]||[]).length>0||!!data.commitments[day]||!!data.journal[day]||!!data.moods[day]||activitiesOn(day).length>0}
 function renderChart(id){const root=$(id);root.innerHTML="";const keys=weekKeys(),vals=keys.map(minutesOn),max=Math.max(30,...vals);keys.forEach((k,i)=>{const col=document.createElement("div");col.className="chart-col";const value=document.createElement("span");value.className="chart-val";value.textContent=vals[i]||"";const bar=document.createElement("div");bar.className="chart-bar";bar.style.height=Math.max(3,vals[i]/max*100)+"%";bar.title=vals[i]+" דקות";const day=document.createElement("span");day.className="chart-day";day.textContent=parseDate(k).toLocaleDateString("he-IL",{weekday:"short"});col.append(value,bar,day);root.append(col)})}
 function renderGoalList(id,compact){
- const root=$(id);if(!root)return;root.innerHTML="";
+ const root=$(id);if(!root)return;root.replaceChildren();
  const checked=data.checks[today()]||[];
  data.goals.forEach(g=>{
-  const row=document.createElement("label");row.className="goal-item"+(checked.includes(g.id)?" done":"");
+  const row=document.createElement("div");row.className="goal-item"+(checked.includes(g.id)?" done":"");
   const input=document.createElement("input");input.type="checkbox";input.checked=checked.includes(g.id);input.setAttribute("aria-label","סימון יעד כהושלם");
-  input.addEventListener("change",()=>{const arr=data.checks[today()]||[];data.checks[today()]=input.checked?arr.concat(g.id):arr.filter(x=>x!==g.id);save();renderAll()});
-  const name=document.createElement("span");name.className="goal-name";name.textContent=g.name;row.append(input,name);
-  root.append(row);
+  input.addEventListener("change",()=>{
+   const arr=data.checks[today()]||[];
+   data.checks[today()]=input.checked?arr.concat(g.id):arr.filter(x=>x!==g.id);
+   save();renderAll();
+  });
+  const name=document.createElement("span");name.className="goal-name";name.textContent=g.name;
+  const edit=document.createElement("button");edit.type="button";edit.className="edit-mini";edit.textContent="✎";edit.setAttribute("aria-label","עריכת יעד "+g.name);
+  edit.addEventListener("click",()=>openEditor("goal",g.id));
+  row.append(input,name,edit);root.append(row);
   enableSwipeDelete(row,()=>{
    data.goals=data.goals.filter(x=>x.id!==g.id);
    Object.keys(data.checks).forEach(k=>{data.checks[k]=(data.checks[k]||[]).filter(x=>x!==g.id)});
@@ -816,26 +840,35 @@ function renderMilestone(){const steps=[7,14,30,60,90,100,180,365],n=countStreak
 function renderHomeTasks(){
  const root=$("homeTaskList");if(!root)return;root.replaceChildren();
  const pending=data.tasks.filter(t=>!t.done&&(!t.date||t.date<=today())).sort((a,b)=>(a.date||"0000-00-00").localeCompare(b.date||"0000-00-00"));
- $("homeTaskSummary").textContent=pending.length?pending.length+" משימות פתוחות שמחכות לך":"אין משימות פתוחות להיום — אפשר לנשום 🙂";
- if(!pending.length){const empty=document.createElement("div");empty.className="home-task-empty";empty.textContent="כל מה שתכננת להיום כבר טופל, או שעוד לא הוספת משימה.";root.append(empty);return}
- pending.slice(0,3).forEach(task=>{
-  const row=document.createElement("div");row.className="home-task-row";
-  const check=document.createElement("input");check.type="checkbox";check.checked=!!task.done;check.setAttribute("aria-label","סימון "+task.title+" כהושלמה");
-  check.addEventListener("change",()=>{task.done=check.checked;task.completedAt=task.done?today():null;save();renderAll()});
+ const completed=data.tasks.filter(t=>t.done&&t.completedAt===today()).sort((a,b)=>(b.completedAt||"").localeCompare(a.completedAt||""));
+ $("homeTaskSummary").textContent=pending.length?pending.length+" משימות פתוחות שמחכות לך":completed.length?"כל המשימות הפתוחות טופלו היום.":"אין משימות פתוחות להיום — אפשר לנשום 🙂";
+ const createRow=(task,isDone)=>{
+  const row=document.createElement("div");row.className="home-task-row"+(isDone?" done":"");
+  const check=document.createElement("input");check.type="checkbox";check.checked=!!task.done;check.setAttribute("aria-label",isDone?"ביטול השלמת "+task.title:"סימון "+task.title+" כהושלמה");
+  check.addEventListener("change",()=>{
+   task.done=check.checked;task.completedAt=task.done?today():null;save();renderAll();
+   if(task.done)showToast("המשימה סומנה כהושלמה.","ביטול",()=>{task.done=false;task.completedAt=null;save();renderAll();showToast("המשימה חזרה לרשימה הפתוחה.")});
+   else showToast("המשימה חזרה לרשימה הפתוחה.");
+  });
   const copy=document.createElement("div");copy.className="home-task-copy";
   const title=document.createElement("strong");title.textContent=task.title;
-  const date=document.createElement("small");date.textContent=task.date&&task.date<today()?"באיחור · "+dateLabel(task.date):task.date?"להיום · "+dateLabel(task.date):"ללא תאריך";
-  if(task.date&&task.date<today())date.className="task-overdue";
+  const date=document.createElement("small");date.textContent=isDone?"הושלמה היום · לחיצה על הסימון לביטול":task.date&&task.date<today()?"באיחור · "+dateLabel(task.date):task.date?"להיום · "+dateLabel(task.date):"ללא תאריך";
+  if(task.date&&task.date<today()&&!isDone)date.className="task-overdue";
   copy.append(title,date);
   const edit=document.createElement("button");edit.type="button";edit.className="edit-mini";edit.textContent="✎";edit.setAttribute("aria-label","עריכת "+task.title);edit.addEventListener("click",()=>openEditor("task",task.id));
   row.append(check,copy,edit);root.append(row);
-  enableSwipeDelete(row,()=>{
-   data.tasks=data.tasks.filter(x=>x.id!==task.id);save();renderAll();showToast("המשימה נמחקה.");
-  },"משימה "+task.title);
- });
- if(pending.length>3){const more=document.createElement("div");more.className="home-task-more";more.textContent="ועוד "+(pending.length-3)+" משימות — כל הרשימה במסך המשימות.";root.append(more)}
+  enableSwipeDelete(row,()=>{data.tasks=data.tasks.filter(x=>x.id!==task.id);save();renderAll();showToast("המשימה נמחקה.")},"משימה "+task.title);
+ };
+ if(!pending.length&&!completed.length){
+  const empty=document.createElement("div");empty.className="home-task-empty";empty.textContent="כל מה שתכננת להיום כבר טופל, או שעוד לא הוספת משימה.";root.append(empty);return;
+ }
+ pending.slice(0,3).forEach(task=>createRow(task,false));
+ if(completed.length){
+  const title=document.createElement("div");title.className="home-task-completed-title";title.textContent="הושלמו היום · אפשר לבטל סימון";root.append(title);
+  completed.slice(0,3).forEach(task=>createRow(task,true));
+ }
+ if(pending.length>3){const more=document.createElement("div");more.className="home-task-more";more.textContent="ועוד "+(pending.length-3)+" משימות — כל הרשימה במסך הפעילות.";root.append(more)}
 }
-
 function renderHome(){const streak=countStreak();data.best=Math.max(Number(data.best)||1,streak);renderMilestone();$("streak").textContent=streak;$("best").textContent=data.best;$("startDateText").textContent="התחלת את המסע ב־"+dateLabel(data.startDate);$("helloText").textContent=new Date().toLocaleDateString("he-IL",{weekday:"long",day:"numeric",month:"long"} )+" · "+(data.prefs.displayName?"שלום "+data.prefs.displayName+", ":"")+"היום הוא הזדמנות חדשה להתקדם.";const checked=(data.checks[today()]||[]).length,total=data.goals.length;$("goalsToday").textContent=checked+"/"+total;$("goalSummary").textContent="הושלמו "+checked+" מתוך "+total+" יעדים להיום";$("goalProgress").style.width=(total?checked/total*100:0)+"%";$("studyWeek").textContent=data.activities.filter(a=>a.type==="study"&&weekKeys().includes(a.date)).reduce((n,a)=>n+Number(a.minutes||0),0)+" דק׳";$("workoutsWeek").textContent=data.activities.filter(a=>a.type==="workout"&&weekKeys().includes(a.date)).length;$("journalPreview").textContent=data.journal[today()]?String(data.journal[today()]).slice(0,150):"עוד לא כתבת ביומן היום. כמה שורות לעצמך יכולות לעשות סדר.";renderGoalList("goalList",true);renderChart("homeChart");$("dailyCommit").textContent=data.commitments[today()]?"✓ סימנת התקדמות להיום":"✦ אני מתקדם היום";renderHomeTasks()}
 function renderStats(){const week=weekKeys();const study=data.activities.filter(a=>a.type==="study"&&week.includes(a.date)).reduce((n,a)=>n+Number(a.minutes||0),0);const workouts=data.activities.filter(a=>a.type==="workout"&&week.includes(a.date)).length;const checks=week.reduce((n,k)=>n+(data.checks[k]||[]).length,0);const now=new Date(),monthPrefix=dateKey(new Date(now.getFullYear(),now.getMonth(),1)).slice(0,7);const activeDays=new Set(Object.keys({...data.checks,...data.journal,...data.commitments}).filter(k=>k.startsWith(monthPrefix)&&activeOn(k)));data.activities.filter(a=>a.date.startsWith(monthPrefix)).forEach(a=>activeDays.add(a.date));const active=activeDays.size;$("studyTotal").textContent=study;$("workoutTotal").textContent=workouts;$("checksTotal").textContent=checks;$("activeMonth").textContent=active;renderChart("statsChart");renderCalendar()}
 function editorField(label,name,type,value,options){
@@ -851,9 +884,10 @@ function editorField(label,name,type,value,options){
  wrap.append(caption,input);return wrap;
 }
 function openEditor(kind,id){
- const record=(kind==="activity"?data.activities:data.tasks).find(item=>String(item.id)===String(id));if(!record)return;
+ const source=kind==="activity"?data.activities:kind==="goal"?data.goals:data.tasks;
+ const record=source.find(item=>String(item.id)===String(id));if(!record)return;
  editingKind=kind;editingId=String(id);$("editFields").replaceChildren();
- $("editTitle").textContent=kind==="activity"?"עריכת פעילות":"עריכת משימה";
+ $("editTitle").textContent=kind==="activity"?"עריכת פעילות":kind==="goal"?"עריכת יעד":"עריכת משימה";
  if(kind==="activity"){
   $("editFields").append(
    editorField("סוג פעילות","type","select",record.type,[["study","📚 לימודים"],["workout","💪 אימון"]]),
@@ -862,6 +896,8 @@ function openEditor(kind,id){
    editorField("משך בדקות","minutes","number",record.minutes||1),
    editorField("הערה (לא חובה)","note","text",record.note||"")
   );
+ }else if(kind==="goal"){
+  $("editFields").append(editorField("שם היעד","name","text",record.name||""));
  }else{
   $("editFields").append(
    editorField("שם המשימה","title","text",record.title||""),
@@ -882,11 +918,14 @@ function saveEditedRecord(event){
   if(!Number.isInteger(minutes)||minutes<1||minutes>600){showToast("משך הפעילות חייב להיות בין 1 ל־600 דקות.");return}
   const item=data.activities.find(x=>String(x.id)===editingId);if(!item)return;
   Object.assign(item,{type:get("type"),date,minutes,name:get("name").trim(),note:get("note").trim()});
- }else{
+ }else if(editingKind==="task"){
   const item=data.tasks.find(x=>String(x.id)===editingId),title=get("title").trim();if(!item||!title){showToast("צריך לתת למשימה שם.");return}
   Object.assign(item,{title,date:get("date"),category:get("category")});
+ }else{
+  const item=data.goals.find(x=>String(x.id)===editingId),name=get("name").trim();if(!item||!name){showToast("צריך לתת ליעד שם.");return}
+  item.name=name.slice(0,52);
  }
- const savedKind=editingKind;closeEditor();save();renderAll();showToast(savedKind==="activity"?"הפעילות עודכנה.":"המשימה עודכנה.");
+ const savedKind=editingKind;closeEditor();save();renderAll();showToast(savedKind==="activity"?"הפעילות עודכנה.":savedKind==="goal"?"היעד עודכן.":"המשימה עודכנה.");
 }
 function renderCalendar(){
  const y=calendarView.getFullYear(),m=calendarView.getMonth(),monthKey=y+"-"+String(m+1).padStart(2,"0");
@@ -1004,7 +1043,7 @@ function renderTasks(){
  filtered.forEach(task=>{
   const row=document.createElement("div");row.className="task-row"+(task.done?" done":"");
   const check=document.createElement("input");check.type="checkbox";check.checked=!!task.done;check.setAttribute("aria-label","סימון משימה כהושלמה");
-  check.addEventListener("change",()=>{task.done=check.checked;task.completedAt=task.done?today():null;save();renderTasks()});
+  check.addEventListener("change",()=>{task.done=check.checked;task.completedAt=task.done?today():null;save();renderTasks();if(task.done)showToast("המשימה סומנה כהושלמה.","ביטול",()=>{task.done=false;task.completedAt=null;save();renderAll();showToast("המשימה חזרה לרשימה הפתוחה.")});else showToast("המשימה חזרה לרשימה הפתוחה.")});
   const copy=document.createElement("div");copy.className="task-copy";
   const title=document.createElement("strong");title.textContent=task.title;
   const info=document.createElement("small");const cat={personal:"אישי",study:"לימודים",workout:"אימון",home:"בית"}[task.category]||"אישי";info.textContent=cat+" · "+(task.date?dateLabel(task.date):"ללא תאריך");if(!task.done&&task.date&&task.date<today())info.className="task-overdue";copy.append(title,info);
