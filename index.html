@@ -322,6 +322,52 @@ html,body,.app,.app *:not(input):not(textarea):not(select):not([contenteditable=
 input,textarea,select,[contenteditable="true"],[contenteditable=""]{-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default!important}
 button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
 
+
+/* Training knowledge hub */
+.training-hero{position:relative;overflow:hidden;border:1px solid #ffffff25;border-radius:25px;padding:19px;background:linear-gradient(135deg,#273c53 0%,#202c4a 50%,#16464a 100%);box-shadow:var(--shadow);margin-bottom:4px}
+.training-hero:after{content:"";position:absolute;width:180px;height:180px;left:-65px;top:-95px;border-radius:50%;border:1px solid #ffffff22;box-shadow:0 0 0 22px #ffffff06,0 0 0 45px #ffffff04;pointer-events:none}
+.training-hero>*{position:relative;z-index:1}
+.training-kicker,.training-quote span{font-size:10px;font-weight:800;color:#c5f3ee}
+.training-hero h2{font-size:22px;line-height:1.25;margin:8px 0}
+.training-hero p{font-size:12px;line-height:1.65;color:#e0e8f5cc;margin:0}
+.training-quote{margin-top:17px;border-top:1px solid #ffffff24;padding-top:12px;display:grid;gap:5px}
+.training-quote strong{font-size:13px;line-height:1.55;color:#fff}
+.training-plan-card{display:grid;gap:8px}
+.training-plan-empty{font-size:12px;color:var(--muted);line-height:1.7}
+.training-plan-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 10px;border-radius:12px;background:#ffffff07;border:1px solid #ffffff12}
+.training-plan-row.is-today{border-color:var(--accent);background:var(--accentSoft)}
+.training-plan-day{font-size:11px;font-weight:850;white-space:nowrap}
+.training-plan-value{font-size:11px;text-align:left;color:var(--text);overflow-wrap:anywhere}
+.training-plan-row.is-rest .training-plan-value{color:var(--muted)}
+.training-plan-today{font-size:9px;color:var(--accent2);margin-right:4px}
+.training-tip-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.training-tip-card{min-width:0;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;padding:14px;background:linear-gradient(150deg,#ffffff10,#ffffff04);box-shadow:0 8px 24px #02061724}
+.training-tip-icon{font-size:22px;margin-bottom:8px;filter:drop-shadow(0 4px 8px var(--accentSoft))}
+.training-tip-card h3{font-size:13px;margin:0 0 7px;font-weight:850}
+.training-tip-card p{font-size:11px;color:var(--muted);line-height:1.7;margin:0 0 12px}
+.training-tip-tag{display:inline-flex;font-size:9px;font-weight:800;color:var(--accent2);background:var(--accentSoft);border:1px solid #ffffff12;border-radius:30px;padding:4px 8px}
+.training-check-card{display:grid;gap:0}
+.training-check-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #ffffff12}
+.training-check-row:last-child{border-bottom:0;padding-bottom:0}
+.training-check-row>span{font-size:11px;font-weight:900;color:var(--accent2);background:var(--accentSoft);border-radius:10px;padding:7px}
+.training-check-row div{display:grid;gap:3px;min-width:0}
+.training-check-row strong{font-size:12px}
+.training-check-row small{font-size:10px;color:var(--muted);line-height:1.5}
+.training-motivation{display:flex;align-items:flex-start;gap:13px;margin-top:16px;padding:16px;border:1px solid #ffffff25;border-radius:18px;background:linear-gradient(120deg,var(--accentSoft),#ffffff06)}
+.training-motivation-icon{font-size:25px}
+.training-motivation div:last-child{display:grid;gap:6px}
+.training-motivation span{font-size:10px;color:var(--accent2);font-weight:800}
+.training-motivation strong{font-size:12px;line-height:1.7}
+.training-sources{display:grid;gap:12px}
+.training-sources a{font-size:11px;line-height:1.6;color:var(--accent2);text-decoration:none;border-bottom:1px solid #ffffff13;padding-bottom:9px}
+.training-sources a:last-of-type{border-bottom:0;padding-bottom:0}
+.training-sources p{font-size:10px;color:var(--muted);line-height:1.6;margin:2px 0 0}
+.tabs{grid-template-columns:repeat(7,minmax(0,1fr))}
+.tab{font-size:9px;padding-left:1px;padding-right:1px}
+.tab .ico{font-size:16px}
+@media(min-width:680px){.tabs{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(max-width:360px){.training-tip-grid{grid-template-columns:minmax(0,1fr)}.training-hero{padding:16px}.training-hero h2{font-size:20px}}
+
 </style>
 </head>
 <body>
@@ -366,6 +412,83 @@ button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
  <div class="section-title"><h2>ההרגלים והיעדים שלי</h2><span class="tiny" id="goalCount">0 יעדים</span></div>
  <div class="card"><div class="tiny">בחר מה חשוב לך היום. אפשר לשנות את הרשימה בכל זמן.</div><div class="progress-line"><div class="progress-fill" id="habitsProgress"></div></div><div class="swipe-hint">החלק שמאלה על יעד כדי לחשוף את כפתור המחיקה.</div><div class="goal-list" id="goalListFull"></div><form class="inline-form" id="addGoalFormFull"><input class="field" id="newGoalFull" maxlength="52" placeholder="שם של הרגל או מטרה..."><button class="btn btn-primary" type="submit">הוספה</button></form></div>
  <div class="card" style="margin-top:12px"><h2 class="card-title">טיפ קטן</h2><p class="muted" style="font-size:12px;line-height:1.7;margin-bottom:0">עדיף לבחור כמה מטרות שאפשר באמת לקיים, מאשר רשימה ארוכה שמרגישה כמו עונש. התקדמות טובה בנויה מצעדים קטנים.</p></div>
+</section>
+
+<section class="page" id="page-training">
+ <div class="training-hero">
+  <div class="training-kicker">הידע שלך הוא חלק מההתקדמות</div>
+  <h2>מתקדמים חכם, לא רק חזק 💪</h2>
+  <p>מקום קטן ללמוד, לקבל רעיונות ולבנות הרגלי אימון טובים לאורך זמן.</p>
+  <div class="training-quote"><span>המסר להיום</span><strong id="trainingQuote">התקדמות טובה נבנית מצעדים קטנים.</strong></div>
+ </div>
+
+ <div class="section-title"><h2>תוכנית האימונים שלך</h2><button class="small-link" id="editTrainingPlan">עריכת תוכנית ←</button></div>
+ <div class="card training-plan-card" id="trainingPlanSummary" aria-live="polite"></div>
+
+ <div class="section-title"><h2>טיפים שיעזרו לך להתקדם</h2><span class="tiny">קצר ולעניין</span></div>
+ <div class="training-tip-grid">
+  <article class="training-tip-card">
+   <div class="training-tip-icon">🔥</div><h3>חימום לפני הכול</h3>
+   <p>הקדש 5–10 דקות לחימום קל ותנועתיות שמתאימה לאימון. תן לגוף להיכנס לקצב בהדרגה, במקום להתחיל ישר מהמשקל הכבד.</p>
+   <span class="training-tip-tag">לפני האימון</span>
+  </article>
+  <article class="training-tip-card">
+   <div class="training-tip-icon">🎯</div><h3>טכניקה לפני משקל</h3>
+   <p>בצע את התנועה בשליטה ובטווח שמתאים לך. אל תוסיף משקל רק כדי להרשים — בקש ממאמן מוסמך לבדוק את הביצוע כשצריך.</p>
+   <span class="training-tip-tag">בזמן האימון</span>
+  </article>
+  <article class="training-tip-card">
+   <div class="training-tip-icon">📈</div><h3>התקדם בהדרגה</h3>
+   <p>רשום משקל, חזרות ואיך הרגשת. כשאתה שולט בתרגיל, אפשר להתקדם בהדרגה ובהכוונה — לא חייבים לשבור שיא בכל אימון.</p>
+   <span class="training-tip-tag">מעקב חכם</span>
+  </article>
+  <article class="training-tip-card">
+   <div class="training-tip-icon">🛌</div><h3>התאוששות היא חלק מהאימון</h3>
+   <p>תן לגוף זמן להתאושש בין אימונים קשים של אותן קבוצות שרירים. שינה, מנוחה וימים קלים הם לא בזבוז זמן — הם חלק מהתוכנית.</p>
+   <span class="training-tip-tag">מנוחה</span>
+  </article>
+  <article class="training-tip-card">
+   <div class="training-tip-icon">⚖️</div><h3>תאמן בצורה מאוזנת</h3>
+   <p>אל תתמקד רק בשרירים שאתה הכי אוהב לראות. שלב עבודה על פלג גוף עליון, רגליים, גב, ליבה ותנועה כללית לפי תוכנית שמתאימה לך.</p>
+   <span class="training-tip-tag">תכנון</span>
+  </article>
+  <article class="training-tip-card">
+   <div class="training-tip-icon">💧</div><h3>שתייה לאורך היום</h3>
+   <p>החזק מים קרוב אליך ושתה באופן קבוע, במיוחד כשחם או כשאתה מזיע. אל תחכה לסוף האימון כדי להיזכר לשתות.</p>
+   <span class="training-tip-tag">הרגל יומי</span>
+  </article>
+  <article class="training-tip-card">
+   <div class="training-tip-icon">🥗</div><h3>אוכל לפני תוספים</h3>
+   <p>תזונה מגוונת וארוחות מסודרות עוזרות לתמוך באימונים ובהתאוששות. משרד הבריאות לא ממליץ לבני נוער על אבקות חלבון ותוספים דומים; העדף מקורות מזון רגילים.</p>
+   <span class="training-tip-tag">תזונה</span>
+  </article>
+  <article class="training-tip-card">
+   <div class="training-tip-icon">🛑</div><h3>לא מתאמנים דרך כאב חד</h3>
+   <p>עייפות שרירית היא דבר אחד; כאב חד, כאב במפרק או כאב שמחמיר הם סיבה לעצור ולספר למאמן ולהורה. אל תנסה להוכיח שאתה מסוגל להתעלם ממנו.</p>
+   <span class="training-tip-tag">בטיחות</span>
+  </article>
+ </div>
+
+ <div class="section-title"><h2>צ'ק־ליסט קטן לאימון</h2></div>
+ <div class="card training-check-card">
+  <div class="training-check-row"><span>01</span><div><strong>הגעתי עם תוכנית</strong><small>אני יודע מה המטרה של האימון היום.</small></div></div>
+  <div class="training-check-row"><span>02</span><div><strong>עשיתי חימום</strong><small>התחלתי בהדרגה ולא קפצתי ישר לעומס.</small></div></div>
+  <div class="training-check-row"><span>03</span><div><strong>שמרתי על טכניקה</strong><small>איכות התנועה חשובה יותר מהמספר על המשקולת.</small></div></div>
+  <div class="training-check-row"><span>04</span><div><strong>תיעדתי את ההתקדמות</strong><small>רשמתי מה עשיתי כדי שאוכל להשוות בהמשך.</small></div></div>
+ </div>
+
+ <div class="training-motivation">
+  <div class="training-motivation-icon">🌱</div>
+  <div><span>תזכורת לעצמך</span><strong>אתה לא צריך לנצח את האימון של אתמול. אתה צריך לבנות הרגל שתוכל לשמור עליו גם מחר.</strong></div>
+ </div>
+
+ <div class="section-title"><h2>רוצה להעמיק?</h2><span class="tiny">מקורות אמינים</span></div>
+ <div class="card training-sources">
+  <a href="https://www.sportsmed.org/youth-strength-training" target="_blank" rel="noopener">הנחיות לאימוני כוח לנוער – האיגוד האמריקאי לרפואת ספורט אורתופדית ↗</a>
+  <a href="https://me.health.gov.il/en/parenting/know-more/physical-activity/active-lifestyle-for-children/" target="_blank" rel="noopener">פעילות גופנית לבני נוער – משרד הבריאות הישראלי ↗</a>
+  <a href="https://www.who.int/initiatives/behealthy/physical-activity" target="_blank" rel="noopener">המלצות פעילות גופנית – ארגון הבריאות העולמי ↗</a>
+  <p>המידע כאן כללי ואינו מחליף הדרכה אישית ממאמן מוסמך או ייעוץ רפואי.</p>
+ </div>
 </section>
 
 <section class="page" id="page-stats">
@@ -525,6 +648,7 @@ button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
  <button class="tab active" data-page="home"><span class="ico">⌂</span>בית</button>
  <button class="tab" data-page="habits"><span class="ico">✓</span>יעדים</button>
  <button class="tab" data-page="activity"><span class="ico">◷</span>פעילות</button>
+ <button class="tab" data-page="training"><span class="ico">💪</span>אימונים</button>
  <button class="tab" data-page="journal"><span class="ico">✎</span>יומן</button>
  <button class="tab" data-page="stats"><span class="ico">▥</span>נתונים</button>
  <button class="tab" data-page="settings"><span class="ico">⚙</span>הגדרות</button>
@@ -872,6 +996,33 @@ function renderLongGoals(){
 }
 
 function renderSettings(){applyTheme();$("customAccent").value=data.prefs.customAccent||"#a78bfa";$("displayName").value=data.prefs.displayName||"";$("reduceMotion").checked=!!data.prefs.reducedMotion;$("reminderEnabled").checked=!!data.prefs.reminderEnabled;$("reminderTime").value=data.prefs.reminderTime||"20:30";$("pinStatus").textContent=vaultMeta?"קוד כניסה פעיל":"קוד כניסה לא מוגדר";$("pinAction").textContent=vaultMeta?"שינוי קוד הכניסה":"הגדרת קוד כניסה";$("removePin").classList.toggle("hidden",!vaultMeta);$("lockNow").classList.toggle("hidden",!vaultMeta);$("startDate").value=data.startDate;$("backupStatus").textContent=data.prefs.lastBackupAt?"גיבוי אחרון: "+dateLabel(data.prefs.lastBackupAt):"עדיין לא נוצר גיבוי."}
+function renderTrainingPage(){
+ const names=["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"],plan=Array.isArray(data.workoutPlan)?data.workoutPlan:Array(7).fill(""),day=new Date().getDay(),root=$("trainingPlanSummary");
+ if(!root)return;
+ root.replaceChildren();
+ if(!plan.some(x=>String(x||"").trim())){
+  const empty=document.createElement("div");empty.className="training-plan-empty";empty.textContent="עוד לא הגדרת את החלוקה השבועית שלך. אפשר לערוך אותה כאן או במסך הבית.";root.append(empty);
+ }else{
+  names.forEach((name,i)=>{
+   const value=String(plan[i]||"").trim(),row=document.createElement("div");
+   row.className="training-plan-row"+(i===day?" is-today":"")+(value.includes("מנוחה")?" is-rest":"");
+   const dayLabel=document.createElement("div");dayLabel.className="training-plan-day";dayLabel.textContent=name;
+   if(i===day){const tag=document.createElement("span");tag.className="training-plan-today";tag.textContent="היום";dayLabel.append(tag)}
+   const detail=document.createElement("div");detail.className="training-plan-value";detail.textContent=value||"לא הוגדר";
+   row.append(dayLabel,detail);root.append(row);
+  });
+ }
+ const quotes=[
+  "התקדמות אמיתית נבנית מצעדים קטנים שחוזרים על עצמם.",
+  "אימון טוב הוא לא תמיד הכי קשה — הוא זה שבוצע נכון.",
+  "תתמקד במה שאתה יכול לשפר היום, לא במה שמישהו אחר מרים.",
+  "מנוחה היא חלק מהתוכנית, לא סטייה ממנה.",
+  "עקביות מנצחת התלהבות שנעלמת אחרי שבוע.",
+  "תן לטכניקה להוביל, והמשקל יתקדם בקצב הנכון.",
+  "תגיע, תעשה את המיטב שלך, ותן לעצמך קרדיט."
+ ];
+ $("trainingQuote").textContent=quotes[(Math.floor(Date.now()/86400000)+4)%quotes.length];
+}
 function renderWorkoutPlan(){
  const names=["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"],plan=Array.isArray(data.workoutPlan)?data.workoutPlan:Array(7).fill(""),day=new Date().getDay(),todayPlan=String(plan[day]||"").trim(),root=$("workoutWeekList");
  $("workoutTodayHeading").textContent="האימון שלך היום · יום "+names[day];
@@ -903,19 +1054,20 @@ function closeWorkoutPlan(){
  $("appRoot").classList.remove("modal-open");document.body.classList.remove("modal-open");document.documentElement.classList.remove("modal-open");
  if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
 }
-function renderAll(){if(!data)return;renderHome();renderWorkoutPlan();renderGoalList("goalListFull",false);$("goalCount").textContent=data.goals.length+" יעדים";$("habitsProgress").style.width=(data.goals.length?(data.checks[today()]||[]).length/data.goals.length*100:0)+"%";renderActivities();renderTasks();renderLongGoals();renderFocus();renderStopwatch();renderSettings();if(activePage==="stats")renderStats();if(activePage==="journal")renderJournalEntries()}
+function renderAll(){if(!data)return;renderHome();renderWorkoutPlan();renderTrainingPage();renderGoalList("goalListFull",false);$("goalCount").textContent=data.goals.length+" יעדים";$("habitsProgress").style.width=(data.goals.length?(data.checks[today()]||[]).length/data.goals.length*100:0)+"%";renderActivities();renderTasks();renderLongGoals();renderFocus();renderStopwatch();renderSettings();if(activePage==="stats")renderStats();if(activePage==="journal")renderJournalEntries()}
 function checkReminder(){if(!data||!data.prefs.reminderEnabled)return;const now=new Date(),parts=(data.prefs.reminderTime||"20:30").split(":").map(Number),due=now.getHours()*60+now.getMinutes(),target=parts[0]*60+parts[1];if(due<target||data.prefs.lastReminderDate===today())return;data.prefs.lastReminderDate=today();save();const message="פתח את המסע שלי וסמן את הצעד הקטן שלך להיום.";if("Notification"in window&&Notification.permission==="granted"){try{new Notification("המסע שלי",{body:message,icon:"./icon-192.png"})}catch(e){showToast(message)}}else showToast(message)}
 function startReminderTimer(){clearInterval(reminderTimer);reminderTimer=setInterval(checkReminder,30000);checkReminder()}
 function showLock(){ $("appRoot").classList.add("hidden");$("lockScreen").classList.add("visible");document.querySelector(".tabs").classList.add("hidden");$("unlockPin").value=""}
 function hideLock(){ $("appRoot").classList.remove("hidden");$("lockScreen").classList.remove("visible");document.querySelector(".tabs").classList.remove("hidden");$("unlockMessage").textContent=""}
 async function boot(){let stored=null;try{stored=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}if(stored&&stored._vault){vaultMeta={salt:stored.salt};showLock();return}if(stored){data=normalize(stored);await save()}else{let old=null;try{old=JSON.parse(localStorage.getItem(OLD_KEY)||"null")}catch(e){}data=normalize(old);await save()}renderAll();startReminderTimer();bootFocus();bootStopwatch()}
 $("editWorkoutPlan").addEventListener("click",openWorkoutPlan);
+$("editTrainingPlan").addEventListener("click",openWorkoutPlan);
 $("closeWorkoutPlan").addEventListener("click",closeWorkoutPlan);
 $("cancelWorkoutPlan").addEventListener("click",closeWorkoutPlan);
 $("workoutOverlay").addEventListener("click",e=>{if(e.target===$("workoutOverlay"))closeWorkoutPlan()});
 $("workoutPlanForm").addEventListener("focusin",e=>{if(e.target.matches("input"))setTimeout(()=>e.target.scrollIntoView({block:"nearest",behavior:"smooth"}),180)});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("workoutOverlay").classList.contains("visible"))closeWorkoutPlan()});
-$("workoutPlanForm").addEventListener("submit",e=>{e.preventDefault();data.workoutPlan=Array.from({length:7},(_,i)=>$("workoutDay"+i).value.trim().slice(0,80));save();renderWorkoutPlan();closeWorkoutPlan();showToast("תוכנית האימונים נשמרה!")});
+$("workoutPlanForm").addEventListener("submit",e=>{e.preventDefault();data.workoutPlan=Array.from({length:7},(_,i)=>$("workoutDay"+i).value.trim().slice(0,80));save();renderWorkoutPlan();renderTrainingPage();closeWorkoutPlan();showToast("תוכנית האימונים נשמרה!")});
 $("addGoalForm").addEventListener("submit",e=>{e.preventDefault();addGoal($("newGoal").value)});$("addGoalFormFull").addEventListener("submit",e=>{e.preventDefault();addGoal($("newGoalFull").value)});
 $("dailyCommit").addEventListener("click",()=>{data.commitments[today()]=true;save();renderAll();showToast("נשמר. היום בחרת להתקדם צעד נוסף.")});
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>gotoPage(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.go==="tasks"){gotoPage("activity",false);requestAnimationFrame(()=>$("taskSection").scrollIntoView({behavior:"smooth",block:"start"}))}else gotoPage(b.dataset.go)}));
