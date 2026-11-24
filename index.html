@@ -368,6 +368,12 @@ button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
 @media(min-width:680px){.tabs{grid-template-columns:repeat(7,minmax(0,1fr))}}
 @media(max-width:360px){.training-tip-grid{grid-template-columns:minmax(0,1fr)}.training-hero{padding:16px}.training-hero h2{font-size:20px}}
 
+
+/* Tighten the bottom layout on iPhone: remove the doubled safe-area gap. */
+body{padding-bottom:0!important}
+.app{height:calc(100dvh - env(safe-area-inset-top))!important}
+.tabs{bottom:8px!important}
+
 </style>
 </head>
 <body>
