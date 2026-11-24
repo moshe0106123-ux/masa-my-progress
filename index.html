@@ -308,9 +308,18 @@ input[type="date"]{display:block;width:100%;max-width:100%;min-width:0;box-sizin
 @media(max-width:420px){.workout-day-fields{grid-template-columns:minmax(0,1fr)}.workout-day-detail{max-width:68%;}}
 
 
+
+/* Workout editor is a top-level sheet, separate from the app page scroller. */
+#workoutOverlay{z-index:1000;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;align-items:flex-start;justify-content:center;padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 16px);touch-action:pan-y}
+#workoutOverlay .workout-editor-card{width:min(100%,540px);max-height:calc(var(--visible-height,100dvh) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 28px);overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scroll-padding-bottom:24px;flex:none;margin:auto 0}
+#appRoot.modal-open{overflow:hidden!important;touch-action:none}
+body.modal-open,html.modal-open{overflow:hidden!important}
+@media(max-width:768px){input,textarea,select,.field,.textarea,.select{font-size:16px!important}}
+#workoutOverlay .field{font-size:16px!important;-webkit-user-select:text!important;user-select:text!important}
+
 /* iPhone touch behavior: no accidental text selection, callouts, or page bounce. */
-html,body,.app,.app *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-input,textarea,select,[contenteditable="true"],[contenteditable=""]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+html,body,.app,.app *:not(input):not(textarea):not(select):not([contenteditable="true"]):not([contenteditable=""]),#workoutOverlay *:not(input):not(textarea):not(select):not([contenteditable="true"]):not([contenteditable=""]){-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+input,textarea,select,[contenteditable="true"],[contenteditable=""]{-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default!important}
 button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
 
 </style>
@@ -491,6 +500,7 @@ button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
  <div class="footer">הנתונים נשמרים בדפדפן של המכשיר הזה. אין חשבון משתמש ואין שרת ששומר את היומן או את הפעילות שלך.</div>
 </section>
 </main>
+</div>
 
 <div class="overlay" id="workoutOverlay">
  <div class="lock-card workout-editor-card" role="dialog" aria-modal="true" aria-labelledby="workoutEditorTitle">
@@ -509,7 +519,6 @@ button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
    <div class="workout-editor-actions"><button class="btn btn-quiet" type="button" id="cancelWorkoutPlan">ביטול</button><button class="btn btn-primary" type="submit">שמירת התוכנית</button></div>
   </form>
  </div>
-</div>
 </div>
 
 <nav class="tabs" aria-label="ניווט ראשי">
@@ -882,10 +891,18 @@ function renderWorkoutPlan(){
 function openWorkoutPlan(){
  const plan=Array.isArray(data.workoutPlan)?data.workoutPlan:Array(7).fill("");
  for(let i=0;i<7;i++)$("workoutDay"+i).value=String(plan[i]||"");
+ syncVisibleViewport();
+ $("appRoot").classList.add("modal-open");document.body.classList.add("modal-open");document.documentElement.classList.add("modal-open");
  $("workoutOverlay").classList.add("visible");
- $("workoutDay"+new Date().getDay()).focus();
+ const current=$("workoutDay"+new Date().getDay());
+ current.focus({preventScroll:true});
+ requestAnimationFrame(()=>current.scrollIntoView({block:"nearest",behavior:"smooth"}));
 }
-function closeWorkoutPlan(){$("workoutOverlay").classList.remove("visible")}
+function closeWorkoutPlan(){
+ $("workoutOverlay").classList.remove("visible");
+ $("appRoot").classList.remove("modal-open");document.body.classList.remove("modal-open");document.documentElement.classList.remove("modal-open");
+ if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+}
 function renderAll(){if(!data)return;renderHome();renderWorkoutPlan();renderGoalList("goalListFull",false);$("goalCount").textContent=data.goals.length+" יעדים";$("habitsProgress").style.width=(data.goals.length?(data.checks[today()]||[]).length/data.goals.length*100:0)+"%";renderActivities();renderTasks();renderLongGoals();renderFocus();renderStopwatch();renderSettings();if(activePage==="stats")renderStats();if(activePage==="journal")renderJournalEntries()}
 function checkReminder(){if(!data||!data.prefs.reminderEnabled)return;const now=new Date(),parts=(data.prefs.reminderTime||"20:30").split(":").map(Number),due=now.getHours()*60+now.getMinutes(),target=parts[0]*60+parts[1];if(due<target||data.prefs.lastReminderDate===today())return;data.prefs.lastReminderDate=today();save();const message="פתח את המסע שלי וסמן את הצעד הקטן שלך להיום.";if("Notification"in window&&Notification.permission==="granted"){try{new Notification("המסע שלי",{body:message,icon:"./icon-192.png"})}catch(e){showToast(message)}}else showToast(message)}
 function startReminderTimer(){clearInterval(reminderTimer);reminderTimer=setInterval(checkReminder,30000);checkReminder()}
@@ -896,6 +913,8 @@ $("editWorkoutPlan").addEventListener("click",openWorkoutPlan);
 $("closeWorkoutPlan").addEventListener("click",closeWorkoutPlan);
 $("cancelWorkoutPlan").addEventListener("click",closeWorkoutPlan);
 $("workoutOverlay").addEventListener("click",e=>{if(e.target===$("workoutOverlay"))closeWorkoutPlan()});
+$("workoutPlanForm").addEventListener("focusin",e=>{if(e.target.matches("input"))setTimeout(()=>e.target.scrollIntoView({block:"nearest",behavior:"smooth"}),180)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("workoutOverlay").classList.contains("visible"))closeWorkoutPlan()});
 $("workoutPlanForm").addEventListener("submit",e=>{e.preventDefault();data.workoutPlan=Array.from({length:7},(_,i)=>$("workoutDay"+i).value.trim().slice(0,80));save();renderWorkoutPlan();closeWorkoutPlan();showToast("תוכנית האימונים נשמרה!")});
 $("addGoalForm").addEventListener("submit",e=>{e.preventDefault();addGoal($("newGoal").value)});$("addGoalFormFull").addEventListener("submit",e=>{e.preventDefault();addGoal($("newGoalFull").value)});
 $("dailyCommit").addEventListener("click",()=>{data.commitments[today()]=true;save();renderAll();showToast("נשמר. היום בחרת להתקדם צעד נוסף.")});
@@ -939,8 +958,19 @@ $("unlockForm").addEventListener("submit",async e=>{e.preventDefault();const pin
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){checkReminder();focusTick();renderStopwatch()}});window.addEventListener("pagehide",()=>{if(data?.stopwatch?.running)save()});
 if("serviceWorker"in navigator&&location.protocol.indexOf("http")===0){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).catch(()=>{}))}
 
+function isEditableTarget(target){return !!(target&&target.closest&&target.closest('input,textarea,select,[contenteditable="true"],[contenteditable=""]'))}
+document.addEventListener("selectstart",e=>{if(!isEditableTarget(e.target))e.preventDefault()},true);
+document.addEventListener("contextmenu",e=>{if(!isEditableTarget(e.target))e.preventDefault()},true);
+document.addEventListener("selectionchange",()=>{const sel=window.getSelection();if(!sel||sel.isCollapsed)return;const node=sel.anchorNode,el=node&&(node.nodeType===1?node:node.parentElement);if(!isEditableTarget(el))sel.removeAllRanges()});
 document.addEventListener("gesturestart",e=>e.preventDefault(),{passive:false});
 document.addEventListener("gesturechange",e=>e.preventDefault(),{passive:false});
+document.addEventListener("touchmove",e=>{if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false,capture:true});
+let lastNonInputTap=0,lastNonInputTapTarget=null;
+document.addEventListener("touchend",e=>{if(isEditableTarget(e.target)||e.target.closest?.("button,a,[role=button]"))return;const now=Date.now();if(now-lastNonInputTap<320&&lastNonInputTapTarget===e.target)e.preventDefault();lastNonInputTap=now;lastNonInputTapTarget=e.target},{passive:false,capture:true});
+function syncVisibleViewport(){if(window.visualViewport)document.documentElement.style.setProperty("--visible-height",window.visualViewport.height+"px");else document.documentElement.style.setProperty("--visible-height",window.innerHeight+"px")}
+syncVisibleViewport();
+window.visualViewport?.addEventListener("resize",syncVisibleViewport);
+window.addEventListener("resize",syncVisibleViewport);
 
 boot();
 })();
