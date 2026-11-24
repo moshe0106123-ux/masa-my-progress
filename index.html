@@ -282,6 +282,31 @@ input[type="date"]{display:block;width:100%;max-width:100%;min-width:0;box-sizin
 .date-inline-row{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%}
 .date-inline-row input[type="date"],.date-inline-row button{width:100%;min-width:0;max-width:100%}
 
+
+/* Weekly workout plan */
+.workout-card{padding:14px}
+.workout-today-box{padding:13px 14px;border:1px solid var(--accent);border-radius:16px;background:linear-gradient(120deg,var(--accentSoft),#ffffff05);margin-bottom:12px}
+.workout-today-kicker{font-size:10px;color:var(--accent2);font-weight:800;margin-bottom:5px}
+.workout-today-value{font-size:17px;font-weight:850;line-height:1.35;overflow-wrap:anywhere}
+.workout-week-list{display:grid;gap:7px}
+.workout-day-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border:1px solid #ffffff12;border-radius:12px;background:#ffffff05;min-width:0}
+.workout-day-row.is-today{border-color:var(--accent);background:var(--accentSoft)}
+.workout-day-name{font-size:12px;font-weight:800;white-space:nowrap}
+.workout-day-detail{font-size:12px;color:var(--text);text-align:left;overflow-wrap:anywhere}
+.workout-day-row.is-rest .workout-day-detail{color:var(--muted)}
+.workout-today-tag{font-size:9px;color:var(--accent2);font-weight:800;margin-right:5px}
+.workout-empty{font-size:12px;line-height:1.7;color:var(--muted);padding:4px 2px}
+.workout-editor-card{width:min(100%,540px);text-align:right;max-height:88dvh;overflow:auto}
+.workout-editor-card .field{letter-spacing:normal;text-align:right;font-size:12px}
+.workout-editor-card .editor-top{margin-bottom:8px}
+.workout-day-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.workout-day-field{display:grid;gap:5px;min-width:0}
+.workout-day-label{font-size:11px;color:var(--muted);font-weight:750}
+.workout-editor-help{font-size:11px;color:var(--muted);line-height:1.6;margin:0}
+.workout-editor-actions{display:flex;gap:8px;margin-top:16px}
+.workout-editor-actions .btn{flex:1}
+@media(max-width:420px){.workout-day-fields{grid-template-columns:minmax(0,1fr)}.workout-day-detail{max-width:68%;}}
+
 </style>
 </head>
 <body>
@@ -311,6 +336,11 @@ input[type="date"]{display:block;width:100%;max-width:100%;min-width:0;box-sizin
  <div class="card"><div class="tiny" id="goalSummary">התקדמות יומית</div><div class="progress-line"><div class="progress-fill" id="goalProgress"></div></div><div class="goal-list" id="goalList"></div><form class="inline-form" id="addGoalForm"><input class="field" id="newGoal" maxlength="52" placeholder="הוסף יעד קטן להיום..." autocomplete="off"><button class="btn btn-soft" type="submit">הוסף</button></form></div>
  <div class="section-title"><h2>המשימות להיום</h2><button class="small-link" data-go="tasks">לכל המשימות ←</button></div>
  <div class="card home-task-card"><div class="tiny" id="homeTaskSummary" aria-live="polite">המשימות שמחכות לך היום</div><div class="home-task-list" id="homeTaskList"></div></div>
+ <div class="section-title"><h2>תוכנית האימונים שלי</h2><button class="small-link" id="editWorkoutPlan">עריכת תוכנית ←</button></div>
+ <div class="card workout-card">
+  <div class="workout-today-box"><div class="workout-today-kicker" id="workoutTodayHeading">האימון שלך היום</div><div class="workout-today-value" id="workoutTodayText">עדיין לא הוגדרה תוכנית אימונים.</div></div>
+  <div class="workout-week-list" id="workoutWeekList"></div>
+ </div>
  <div class="section-title"><h2>השבוע שלך</h2><button class="small-link" data-go="stats">לכל הנתונים ←</button></div>
  <div class="card"><div class="chart" id="homeChart"></div><div class="legend"><span><i class="dot"></i>דקות לימוד ואימון שתיעדת</span></div></div>
  <div class="section-title"><h2>רגע לעצמך</h2><button class="small-link" data-go="journal">פתיחת היומן ←</button></div>
@@ -455,6 +485,25 @@ input[type="date"]{display:block;width:100%;max-width:100%;min-width:0;box-sizin
  <div class="footer">הנתונים נשמרים בדפדפן של המכשיר הזה. אין חשבון משתמש ואין שרת ששומר את היומן או את הפעילות שלך.</div>
 </section>
 </main>
+
+<div class="overlay" id="workoutOverlay">
+ <div class="lock-card workout-editor-card" role="dialog" aria-modal="true" aria-labelledby="workoutEditorTitle">
+  <div class="editor-top"><div><div class="tiny">התוכנית האישית שלך</div><h2 id="workoutEditorTitle">עריכת תוכנית אימונים</h2></div><button type="button" class="round-btn" id="closeWorkoutPlan" aria-label="סגירה">×</button></div>
+  <p class="workout-editor-help">כתוב מה אתה מאמן בכל יום. אפשר לשלב כמה קבוצות שרירים, לשנות בכל זמן, ולכתוב גם "מנוחה".</p>
+  <form id="workoutPlanForm">
+   <div class="workout-day-fields">
+    <div class="workout-day-field"><label class="workout-day-label" for="workoutDay0">יום ראשון</label><input class="field" id="workoutDay0" maxlength="80" placeholder="למשל: חזה + יד קדמית"></div>
+    <div class="workout-day-field"><label class="workout-day-label" for="workoutDay1">יום שני</label><input class="field" id="workoutDay1" maxlength="80" placeholder="למשל: גב + יד אחורית"></div>
+    <div class="workout-day-field"><label class="workout-day-label" for="workoutDay2">יום שלישי</label><input class="field" id="workoutDay2" maxlength="80" placeholder="למשל: רגליים + בטן"></div>
+    <div class="workout-day-field"><label class="workout-day-label" for="workoutDay3">יום רביעי</label><input class="field" id="workoutDay3" maxlength="80" placeholder="למשל: מנוחה"></div>
+    <div class="workout-day-field"><label class="workout-day-label" for="workoutDay4">יום חמישי</label><input class="field" id="workoutDay4" maxlength="80" placeholder="למשל: כתפיים + ידיים"></div>
+    <div class="workout-day-field"><label class="workout-day-label" for="workoutDay5">יום שישי</label><input class="field" id="workoutDay5" maxlength="80" placeholder="למשל: חזה + גב"></div>
+    <div class="workout-day-field"><label class="workout-day-label" for="workoutDay6">יום שבת</label><input class="field" id="workoutDay6" maxlength="80" placeholder="למשל: מנוחה"></div>
+   </div>
+   <div class="workout-editor-actions"><button class="btn btn-quiet" type="button" id="cancelWorkoutPlan">ביטול</button><button class="btn btn-primary" type="submit">שמירת התוכנית</button></div>
+  </form>
+ </div>
+</div>
 </div>
 
 <nav class="tabs" aria-label="ניווט ראשי">
@@ -495,8 +544,8 @@ const dateKey=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+
 const today=()=>dateKey(new Date()), parseDate=s=>{const p=String(s||"").split("-").map(Number);return new Date(p[0],p[1]-1,p[2],12)};
 const dayDiff=(a,b)=>Math.max(0,Math.floor((parseDate(b)-parseDate(a))/86400000));
 const dateLabel=s=>parseDate(s).toLocaleDateString("he-IL",{day:"2-digit",month:"2-digit",year:"numeric"});
-const defaultData=()=>({version:3,startDate:today(),best:1,goals:[{id:"g1",name:"ללמוד 25 דקות"},{id:"g2",name:"לקום בזמן ולהגיע מוכן"},{id:"g3",name:"פעילות גופנית או אימון"},{id:"g4",name:"להתנהל בכבוד ובביטחון"}],checks:{},commitments:{},journal:{},moods:{},activities:[],tasks:[],longGoals:[],focusTimer:{duration:25,remaining:1500,running:false,endsAt:null,mode:"study"},stopwatch:{running:false,startedAt:null,elapsedMs:0,laps:[]},prefs:{theme:"violet",customAccent:"#a78bfa",displayName:"",reducedMotion:false,reminderEnabled:false,reminderTime:"20:30",lastReminderDate:""}});
-function normalize(v){const d=defaultData();if(!v||typeof v!=="object")return d;return {...d,...v,version:3,goals:Array.isArray(v.goals)?v.goals:d.goals,checks:v.checks&&typeof v.checks==="object"?v.checks:{},commitments:v.commitments&&typeof v.commitments==="object"?v.commitments:{},journal:v.journal&&typeof v.journal==="object"?v.journal:{},moods:v.moods&&typeof v.moods==="object"?v.moods:{},activities:Array.isArray(v.activities)?v.activities:[],tasks:Array.isArray(v.tasks)?v.tasks:[],longGoals:Array.isArray(v.longGoals)?v.longGoals:[],focusTimer:v.focusTimer&&typeof v.focusTimer==="object"?{...d.focusTimer,...v.focusTimer}:d.focusTimer,stopwatch:v.stopwatch&&typeof v.stopwatch==="object"?{...d.stopwatch,...v.stopwatch,laps:Array.isArray(v.stopwatch.laps)?v.stopwatch.laps:[]}:d.stopwatch,prefs:{...d.prefs,...(v.prefs||{})}}}
+const defaultData=()=>({version:3,startDate:today(),best:1,goals:[{id:"g1",name:"ללמוד 25 דקות"},{id:"g2",name:"לקום בזמן ולהגיע מוכן"},{id:"g3",name:"פעילות גופנית או אימון"},{id:"g4",name:"להתנהל בכבוד ובביטחון"}],checks:{},commitments:{},journal:{},moods:{},activities:[],tasks:[],longGoals:[],focusTimer:{duration:25,remaining:1500,running:false,endsAt:null,mode:"study"},stopwatch:{running:false,startedAt:null,elapsedMs:0,laps:[]},workoutPlan:["","","","","","",""],prefs:{theme:"violet",customAccent:"#a78bfa",displayName:"",reducedMotion:false,reminderEnabled:false,reminderTime:"20:30",lastReminderDate:""}});
+function normalize(v){const d=defaultData();if(!v||typeof v!=="object")return d;return {...d,...v,version:3,goals:Array.isArray(v.goals)?v.goals:d.goals,checks:v.checks&&typeof v.checks==="object"?v.checks:{},commitments:v.commitments&&typeof v.commitments==="object"?v.commitments:{},journal:v.journal&&typeof v.journal==="object"?v.journal:{},moods:v.moods&&typeof v.moods==="object"?v.moods:{},activities:Array.isArray(v.activities)?v.activities:[],tasks:Array.isArray(v.tasks)?v.tasks:[],longGoals:Array.isArray(v.longGoals)?v.longGoals:[],workoutPlan:Array.isArray(v.workoutPlan)?Array.from({length:7},(_,i)=>String(v.workoutPlan[i]||"").slice(0,80)):d.workoutPlan,focusTimer:v.focusTimer&&typeof v.focusTimer==="object"?{...d.focusTimer,...v.focusTimer}:d.focusTimer,stopwatch:v.stopwatch&&typeof v.stopwatch==="object"?{...d.stopwatch,...v.stopwatch,laps:Array.isArray(v.stopwatch.laps)?v.stopwatch.laps:[]}:d.stopwatch,prefs:{...d.prefs,...(v.prefs||{})}}}
 let data=null,vault=null,vaultMeta=null,saveQueue=Promise.resolve(),toastTimer=null,activeSwipeShell=null,calendarView=new Date(new Date().getFullYear(),new Date().getMonth(),1),selectedCalendarDay=today(),activePage="home",reminderTimer=null,editingKind=null,editingId=null;
 function b64(buf){const bytes=new Uint8Array(buf);let binary="";for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary)}
 function unb64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0))}
@@ -808,12 +857,40 @@ function renderLongGoals(){
 }
 
 function renderSettings(){applyTheme();$("customAccent").value=data.prefs.customAccent||"#a78bfa";$("displayName").value=data.prefs.displayName||"";$("reduceMotion").checked=!!data.prefs.reducedMotion;$("reminderEnabled").checked=!!data.prefs.reminderEnabled;$("reminderTime").value=data.prefs.reminderTime||"20:30";$("pinStatus").textContent=vaultMeta?"קוד כניסה פעיל":"קוד כניסה לא מוגדר";$("pinAction").textContent=vaultMeta?"שינוי קוד הכניסה":"הגדרת קוד כניסה";$("removePin").classList.toggle("hidden",!vaultMeta);$("lockNow").classList.toggle("hidden",!vaultMeta);$("startDate").value=data.startDate;$("backupStatus").textContent=data.prefs.lastBackupAt?"גיבוי אחרון: "+dateLabel(data.prefs.lastBackupAt):"עדיין לא נוצר גיבוי."}
-function renderAll(){if(!data)return;renderHome();renderGoalList("goalListFull",false);$("goalCount").textContent=data.goals.length+" יעדים";$("habitsProgress").style.width=(data.goals.length?(data.checks[today()]||[]).length/data.goals.length*100:0)+"%";renderActivities();renderTasks();renderLongGoals();renderFocus();renderStopwatch();renderSettings();if(activePage==="stats")renderStats();if(activePage==="journal")renderJournalEntries()}
+function renderWorkoutPlan(){
+ const names=["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"],plan=Array.isArray(data.workoutPlan)?data.workoutPlan:Array(7).fill(""),day=new Date().getDay(),todayPlan=String(plan[day]||"").trim(),root=$("workoutWeekList");
+ $("workoutTodayHeading").textContent="האימון שלך היום · יום "+names[day];
+ $("workoutTodayText").textContent=todayPlan||"לא הוגדר אימון להיום — אפשר לערוך את התוכנית ולהוסיף מה מתוכנן.";
+ root.replaceChildren();
+ if(!plan.some(x=>String(x||"").trim())){
+  const empty=document.createElement("div");empty.className="workout-empty";empty.textContent="כאן תופיע החלוקה השבועית שלך. לחץ על ״עריכת תוכנית״ והגדר מה אתה מאמן בכל יום.";root.append(empty);return;
+ }
+ names.forEach((name,i)=>{
+  const value=String(plan[i]||"").trim(),row=document.createElement("div");row.className="workout-day-row"+(i===day?" is-today":"")+(!value||value.includes("מנוחה")?" is-rest":"");
+  const dayLabel=document.createElement("div");dayLabel.className="workout-day-name";dayLabel.textContent=name;
+  if(i===day){const tag=document.createElement("span");tag.className="workout-today-tag";tag.textContent="היום";dayLabel.append(tag)}
+  const detail=document.createElement("div");detail.className="workout-day-detail";detail.textContent=value||"לא הוגדר";
+  row.append(dayLabel,detail);root.append(row);
+ });
+}
+function openWorkoutPlan(){
+ const plan=Array.isArray(data.workoutPlan)?data.workoutPlan:Array(7).fill("");
+ for(let i=0;i<7;i++)$("workoutDay"+i).value=String(plan[i]||"");
+ $("workoutOverlay").classList.add("visible");
+ $("workoutDay"+new Date().getDay()).focus();
+}
+function closeWorkoutPlan(){$("workoutOverlay").classList.remove("visible")}
+function renderAll(){if(!data)return;renderHome();renderWorkoutPlan();renderGoalList("goalListFull",false);$("goalCount").textContent=data.goals.length+" יעדים";$("habitsProgress").style.width=(data.goals.length?(data.checks[today()]||[]).length/data.goals.length*100:0)+"%";renderActivities();renderTasks();renderLongGoals();renderFocus();renderStopwatch();renderSettings();if(activePage==="stats")renderStats();if(activePage==="journal")renderJournalEntries()}
 function checkReminder(){if(!data||!data.prefs.reminderEnabled)return;const now=new Date(),parts=(data.prefs.reminderTime||"20:30").split(":").map(Number),due=now.getHours()*60+now.getMinutes(),target=parts[0]*60+parts[1];if(due<target||data.prefs.lastReminderDate===today())return;data.prefs.lastReminderDate=today();save();const message="פתח את המסע שלי וסמן את הצעד הקטן שלך להיום.";if("Notification"in window&&Notification.permission==="granted"){try{new Notification("המסע שלי",{body:message,icon:"./icon-192.png"})}catch(e){showToast(message)}}else showToast(message)}
 function startReminderTimer(){clearInterval(reminderTimer);reminderTimer=setInterval(checkReminder,30000);checkReminder()}
 function showLock(){ $("appRoot").classList.add("hidden");$("lockScreen").classList.add("visible");document.querySelector(".tabs").classList.add("hidden");$("unlockPin").value=""}
 function hideLock(){ $("appRoot").classList.remove("hidden");$("lockScreen").classList.remove("visible");document.querySelector(".tabs").classList.remove("hidden");$("unlockMessage").textContent=""}
 async function boot(){let stored=null;try{stored=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}if(stored&&stored._vault){vaultMeta={salt:stored.salt};showLock();return}if(stored){data=normalize(stored);await save()}else{let old=null;try{old=JSON.parse(localStorage.getItem(OLD_KEY)||"null")}catch(e){}data=normalize(old);await save()}renderAll();startReminderTimer();bootFocus();bootStopwatch()}
+$("editWorkoutPlan").addEventListener("click",openWorkoutPlan);
+$("closeWorkoutPlan").addEventListener("click",closeWorkoutPlan);
+$("cancelWorkoutPlan").addEventListener("click",closeWorkoutPlan);
+$("workoutOverlay").addEventListener("click",e=>{if(e.target===$("workoutOverlay"))closeWorkoutPlan()});
+$("workoutPlanForm").addEventListener("submit",e=>{e.preventDefault();data.workoutPlan=Array.from({length:7},(_,i)=>$("workoutDay"+i).value.trim().slice(0,80));save();renderWorkoutPlan();closeWorkoutPlan();showToast("תוכנית האימונים נשמרה!")});
 $("addGoalForm").addEventListener("submit",e=>{e.preventDefault();addGoal($("newGoal").value)});$("addGoalFormFull").addEventListener("submit",e=>{e.preventDefault();addGoal($("newGoalFull").value)});
 $("dailyCommit").addEventListener("click",()=>{data.commitments[today()]=true;save();renderAll();showToast("נשמר. היום בחרת להתקדם צעד נוסף.")});
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>gotoPage(b.dataset.page)));document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.go==="tasks"){gotoPage("activity",false);requestAnimationFrame(()=>$("taskSection").scrollIntoView({behavior:"smooth",block:"start"}))}else gotoPage(b.dataset.go)}));
