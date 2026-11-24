@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=auto">
 <meta name="theme-color" content="#0b1020">
 <meta name="description" content="המסע שלי — מקום אישי למטרות, הרגלים והתקדמות.">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -377,15 +377,17 @@ button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
 
 
 
-/* One measured safe-area model for installed iPhone Home Screen mode. */
+
+/* iOS standalone layout: use the native non-cover viewport, compensate only for the home indicator. */
 html,body{width:100%;height:100%;min-height:0;overflow:hidden}
-body{margin:0;padding:0!important;overscroll-behavior:none}
+body{margin:0;height:100dvh;padding:0!important;overscroll-behavior:none}
+.ios-standalone{--ios-home-indicator: max(34px,env(safe-area-inset-bottom,0px))}
 .ios-standalone #appRoot{
   position:fixed;inset:0;
   width:min(100% - 28px,820px);
-  height:auto!important;min-height:0!important;
+  height:100dvh!important;min-height:100dvh!important;
   margin:0 auto;
-  padding:calc(env(safe-area-inset-top) + 6px) 0 calc(env(safe-area-inset-bottom) + 86px)!important;
+  padding:6px 0 calc(76px + var(--ios-home-indicator))!important;
   overflow-x:hidden;overflow-y:auto;
   overscroll-behavior-y:contain;
   -webkit-overflow-scrolling:touch;
@@ -393,11 +395,11 @@ body{margin:0;padding:0!important;overscroll-behavior:none}
 }
 .ios-standalone .tabs{
   position:fixed;
-  bottom:calc(env(safe-area-inset-bottom) + 8px)!important;
+  bottom:calc(var(--ios-home-indicator) + 8px)!important;
 }
 .ios-standalone .overlay{
   position:fixed;inset:0;
-  padding:calc(env(safe-area-inset-top) + 16px) 20px calc(env(safe-area-inset-bottom) + 16px);
+  padding:16px 20px;
 }
 .ios-standalone #lockScreen{
   align-items:center;justify-content:center;
