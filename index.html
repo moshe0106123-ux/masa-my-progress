@@ -2,16 +2,23 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=auto">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
 <meta name="description" content="המסע שלי — מקום אישי למטרות, הרגלים והתקדמות.">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="המסע שלי">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <title>המסע שלי</title>
+<script>
+(function(){
+  var standalone=!!(window.navigator.standalone===true||(window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches));
+  if(standalone)document.documentElement.classList.add("ios-standalone");
+})();
+</script>
+
 <style>
 :root{color-scheme:dark;--bg:#0b1020;--surface:#151d32;--surface2:#1d2942;--surface3:#24314d;--line:#33415f;--text:#f5f7ff;--muted:#a6b0c8;--accent:#a78bfa;--accent2:#67e8f9;--accentSoft:#a78bfa22;--good:#71e2b8;--warn:#f6c878;--danger:#f28e9b;--shadow:0 18px 50px #03071266}
 :root[data-theme="ocean"]{--accent:#67e8f9;--accent2:#60a5fa;--accentSoft:#67e8f922}
@@ -369,26 +376,33 @@ button,a,.tab,.round-btn,.small-link,.btn{touch-action:manipulation}
 @media(max-width:360px){.training-tip-grid{grid-template-columns:minmax(0,1fr)}.training-hero{padding:16px}.training-hero h2{font-size:20px}}
 
 
-/* Tighten the bottom layout on iPhone: remove the doubled safe-area gap. */
-body{padding-bottom:0!important}
-.app{height:calc(100dvh - env(safe-area-inset-top))!important}
-.tabs{bottom:8px!important}
 
-
-/* Reduce the empty scroll tail below the floating navigation. */
-.app{padding-bottom:calc(76px + env(safe-area-inset-bottom))!important}
-
-
-/* iOS Home Screen viewport: let WebKit reserve the status-bar area itself. */
-html,body{height:100%;min-height:100%;overflow:hidden}
-body{padding-top:0!important;padding-bottom:0!important}
-.app{height:100dvh!important;min-height:100dvh!important;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))!important}
-.tabs{bottom:8px!important}
-
-
-/* Small iPhone framing adjustment: lift content and floating navigation. */
-.app{padding-top:10px!important}
-.tabs{bottom:14px!important}
+/* One measured safe-area model for installed iPhone Home Screen mode. */
+html,body{width:100%;height:100%;min-height:0;overflow:hidden}
+body{margin:0;padding:0!important;overscroll-behavior:none}
+.ios-standalone #appRoot{
+  position:fixed;inset:0;
+  width:min(100% - 28px,820px);
+  height:auto!important;min-height:0!important;
+  margin:0 auto;
+  padding:calc(env(safe-area-inset-top) + 6px) 0 calc(env(safe-area-inset-bottom) + 86px)!important;
+  overflow-x:hidden;overflow-y:auto;
+  overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
+}
+.ios-standalone .tabs{
+  position:fixed;
+  bottom:calc(env(safe-area-inset-bottom) + 8px)!important;
+}
+.ios-standalone .overlay{
+  position:fixed;inset:0;
+  padding:calc(env(safe-area-inset-top) + 16px) 20px calc(env(safe-area-inset-bottom) + 16px);
+}
+.ios-standalone #lockScreen{
+  align-items:center;justify-content:center;
+}
+.ios-standalone #lockScreen .lock-card{margin:auto}
 
 </style>
 </head>
